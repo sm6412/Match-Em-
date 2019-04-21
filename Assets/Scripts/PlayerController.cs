@@ -28,6 +28,18 @@ public class PlayerController : MonoBehaviour
     // ref to current grade tracker 
     CurrentGradeTracker gradeTracker;
 
+    // particle effects
+    public GameObject redGlow;
+    public GameObject orangeGlow;
+    public GameObject yellowGlow;
+    public GameObject greenGlow;
+
+    bool isGreen = false;
+    bool isYellow = false;
+    bool isOrange = false;
+    bool isRed = false;
+    GameObject currentParticles = null;
+
 
     // Start is called before the first frame update
     void Start()
@@ -179,45 +191,78 @@ public class PlayerController : MonoBehaviour
     // change player color according to current grade
     void checkPosition()
     {
+        string greenString = "#56FF00";
+        string yellowString = "#FFFF01";
+        string orangeString = "#FFAA01";
+        string redString = "#FE0003";
+
         // B range
+        // make red
         double pos = pc.transform.position.y;
         if (pos >= -2.1 && pos < -1.19)
         {
-            Color newColor;
-            string hexString = "#56FF00";
-            ColorUtility.TryParseHtmlString(hexString, out newColor);
-            this.GetComponent<SpriteRenderer>().color = newColor;
-            gradeTracker.setCurrentGrade("B");
-
+            if (isRed == false)
+            {
+                Color newColor;
+                ColorUtility.TryParseHtmlString(redString, out newColor);
+                this.GetComponent<SpriteRenderer>().color = newColor;
+                gradeTracker.setCurrentGrade("B");
+                isRed = true;
+                // add particles 
+                currentParticles = Instantiate(redGlow);
+            }
         }
         // B+ range
+        // make orange
         else if (pos >= -1.19 && pos < 0.4)
         {
-            Color newColor;
-            string hexString = "#FFFF01";
-            ColorUtility.TryParseHtmlString(hexString, out newColor);
-            this.GetComponent<SpriteRenderer>().color = newColor;
-            gradeTracker.setCurrentGrade("B+");
+            if (isOrange == false)
+            {
+                Color newColor;
+                ColorUtility.TryParseHtmlString(orangeString, out newColor);
+                this.GetComponent<SpriteRenderer>().color = newColor;
+                gradeTracker.setCurrentGrade("B+");
+                isOrange = true;
+
+                // set particles 
+                Destroy(currentParticles);
+                currentParticles = Instantiate(orangeGlow);
+            }
+
 
         }
         // A range
+        // make yellow
         else if (pos >= 0.4 && pos < 1.87)
         {
-            Color newColor;
-            string hexString = "#FFAA01";
-            ColorUtility.TryParseHtmlString(hexString, out newColor);
-            this.GetComponent<SpriteRenderer>().color = newColor;
-            gradeTracker.setCurrentGrade("A");
-
+            if (isYellow == false)
+            {
+                Color newColor;
+                ColorUtility.TryParseHtmlString(yellowString, out newColor);
+                this.GetComponent<SpriteRenderer>().color = newColor;
+                gradeTracker.setCurrentGrade("A");
+                isYellow = true;
+                // add particles
+                Destroy(currentParticles);
+                currentParticles = Instantiate(yellowGlow);
+            }
         }
         // A+ range
         else if (pos >= 1.87 && pos < 3.11)
         {
-            Color newColor;
-            string hexString = "#FE0003";
-            ColorUtility.TryParseHtmlString(hexString, out newColor);
-            this.GetComponent<SpriteRenderer>().color = newColor;
-            gradeTracker.setCurrentGrade("A+");
+            if (isRed == false)
+            {
+                Color newColor;
+                ColorUtility.TryParseHtmlString(greenString, out newColor);
+                this.GetComponent<SpriteRenderer>().color = newColor;
+                gradeTracker.setCurrentGrade("A+");
+                isRed = true;
+                // add particles
+                Destroy(currentParticles);
+                currentParticles = Instantiate(redGlow);
+
+            }
+
         }
     }
 }

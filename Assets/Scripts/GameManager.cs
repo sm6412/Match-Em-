@@ -53,6 +53,10 @@ public class GameManager : MonoBehaviour
 
     // sound effects for when the players makes a match
     public AudioClip successSound;
+
+    // create a reactions for when you get matches
+    public GameObject awesome;
+    public GameObject bonus;
     
     // Start is called before the first frame update
     void Awake()
@@ -297,13 +301,22 @@ public class GameManager : MonoBehaviour
                 checkRepopulatedGrid();
             }
         }
-        
-        // if out of moves, end game
-        if (GameObject.Find("Player(Clone)").GetComponent<PlayerController>().moveNum == 0)
+        else
         {
-            SceneManager.LoadScene("End");
+            // if out of moves, end game
+            if (GameObject.Find("Player(Clone)").GetComponent<PlayerController>().moveNum == 0)
+            {
+                SceneManager.LoadScene("End");
+            }
+
+            // give the tile an effect
+            StartCoroutine(TileEffect(currentTile,gm.scaleAmount));
         }
+        
+
     }
+
+    
 
     public void Repopulate(int x, int y)
     {
@@ -364,6 +377,74 @@ public class GameManager : MonoBehaviour
             }
         }
     }
+
+
+
+    private IEnumerator TileEffect(GameObject currentTile, float _currentScale)
+    {
+        const float TargetScale = 0.5f;
+        float InitScale = _currentScale;
+        const int FramesCount = 200;
+        const float AnimationTimeSeconds = 10;
+        float _deltaTime = AnimationTimeSeconds / FramesCount;
+        float _dx = (TargetScale - InitScale) / FramesCount;
+        bool _upScale = true;
+        while (true)
+        {
+            while (_upScale)
+            {
+                _currentScale += _dx;
+                if (_currentScale > TargetScale)
+                {
+                    _upScale = false;
+                    _currentScale = TargetScale;
+                }
+                if (currentTile == null)
+                {
+                    yield break;
+                }
+                currentTile.transform.localScale = Vector3.one * _currentScale;
+                yield return new WaitForSeconds(_deltaTime);
+            }
+
+            while (!_upScale)
+            {
+                _currentScale -= _dx;
+                if (_currentScale < InitScale)
+                {
+                    _upScale = true;
+                    _currentScale = InitScale;
+                }
+                if (currentTile == null)
+                {
+                    yield break;
+                }
+                currentTile.transform.localScale = Vector3.one * _currentScale;
+                yield return new WaitForSeconds(_deltaTime);
+            }
+            yield break;
+        }
+        
+    }
+
+    GameObject currentReaction = null;
+    private IEnumerator DisplayReaction(GameObject reaction)
+    {
+        Destroy(currentReaction);
+        currentReaction = Instantiate(reaction);
+        float waitTime = 0.8f;
+        while (waitTime > 0)
+        {
+            waitTime -= Time.deltaTime;
+            yield return null;
+            
+        }
+        Destroy(currentReaction);
+        yield break;
+
+    }
+
+
 
     // this function is responsible for the lerping that occurs as the tiles fall down
     public IEnumerator lerp(Vector2 start, Vector2 end, GameObject g)
@@ -463,6 +544,7 @@ public class GameManager : MonoBehaviour
 
 
                 pos = gm.tiles[row, col].transform.position;
+
                 Destroy(gm.tiles[row, col]);
                 gm.tiles[row, col] = null;
 
@@ -490,6 +572,7 @@ public class GameManager : MonoBehaviour
                 st.updateSpecies(species);
 
                 pos = gm.tiles[row, col].transform.position;
+
                 Destroy(gm.tiles[row, col]);
                 gm.tiles[row, col] = null;
 
@@ -529,6 +612,7 @@ public class GameManager : MonoBehaviour
     // increment the player's score
     void IncrementScore()
     {
+        bool haveBonus = false;
         for (int i = 0; i < 25; i++)
         {
             int currentNumOfSpecies = numOfEachSpecies[i];
@@ -537,6 +621,7 @@ public class GameManager : MonoBehaviour
             if (currentNumOfSpecies > 1)
             {
                 scoreNum += currentNumOfSpecies * 2;
+                haveBonus = true;
             }
             else if(currentNumOfSpecies == 1)
             {
@@ -546,6 +631,21 @@ public class GameManager : MonoBehaviour
 
         // make progress controller move up
         progressController.AdjustProgress(scoreNum);
+
+        // dont display reaction when rechecking the grid
+        if (recheckingGrid == false)
+        {
+            if (haveBonus == true)
+            {
+                StartCoroutine(DisplayReaction(bonus));
+            }
+            else
+            {
+                StartCoroutine(DisplayReaction(awesome));
+            }
+
+        }
+
 
     }
 }

@@ -190,7 +190,13 @@ MonoBehaviour:
   moveNum: 50
   moves: {fileID: 3779751005114057057}
   canMove: 1
-  moveTileSound: {fileID: 8300000, guid: 29166536c4332d54fa380566ef7e3486, type: 3}
+  redGlow: {fileID: 6413091554061554858, guid: 62faee69274b4eb4e8c5ee0a2e914f65, type: 3}
+  orangeGlow: {fileID: 8179664753166924081, guid: c99d3d07e4bedbe41a6bba398d5cbff7,
+    type: 3}
+  yellowGlow: {fileID: 6117383675506755870, guid: a374bff43aaae6b458132f0c13f604a0,
+    type: 3}
+  greenGlow: {fileID: 7839467053582479336, guid: a13acdd85c3431048a48d3de517cd9ce,
+    type: 3}
 --- !u!82 &6235987491843757878
 AudioSource:
   m_ObjectHideFlags: 0

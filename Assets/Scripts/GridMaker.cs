@@ -5,7 +5,7 @@ using UnityEngine;
 public class GridMaker : MonoBehaviour
 {
     // scale 
-    float scaleAmount = 0.8188466f;
+    public float scaleAmount = 0.81f;
 
     // set the width and height of the grid
     public const int width = 5;

@@ -76,7 +76,7 @@ public class End : MonoBehaviour
         // restart the game when the spacebar is pressed
         if (Input.GetKeyDown(KeyCode.Space))
         {
-            SceneManager.LoadScene("Gameplay");
+            SceneManager.LoadScene("Easy Level");
         }
         
     }
