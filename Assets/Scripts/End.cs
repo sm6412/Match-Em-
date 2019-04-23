@@ -125,7 +125,7 @@ public class End : MonoBehaviour
         else if (type == 1)
         {
             speciesSR.sprite = sprite2;
-            speciesNameText.text = "Eastern Spotted Newt";
+            speciesNameText.text = "Eastern Red Spotted Newt";
             funfactText.text = "It is one of only 7 species of newt in North America, out of only 87 species worldwide.";
         }
         else if (type == 2)

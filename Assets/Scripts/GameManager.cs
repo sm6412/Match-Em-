@@ -531,14 +531,13 @@ public class GameManager : MonoBehaviour
         }
     }
 
-
-
+    [Header ("Tile Animation Variables")]
+    public int FramesCount;
+    public float AnimationTimeSeconds;
     private IEnumerator TileEffect(GameObject currentTile, float _currentScale)
     {
         const float TargetScale = 0.5f;
         float InitScale = _currentScale;
-        const int FramesCount = 200;
-        const float AnimationTimeSeconds = 10;
         float _deltaTime = AnimationTimeSeconds / FramesCount;
         float _dx = (TargetScale - InitScale) / FramesCount;
         bool _upScale = true;
@@ -581,14 +580,17 @@ public class GameManager : MonoBehaviour
     }
 
     GameObject currentReaction = null;
+    public int rotationSpeed;
     private IEnumerator DisplayReaction(GameObject reaction)
     {
+        
         Destroy(currentReaction);
         currentReaction = Instantiate(reaction);
-        float waitTime = 0.8f;
-        while (waitTime > 0)
+        float rotationAmt = 0;
+        while (rotationAmt != 10)
         {
-            waitTime -= Time.deltaTime;
+            rotationAmt += 1;
+            currentReaction.transform.Rotate(0, 0, rotationAmt);
             yield return null;
             
         }
@@ -805,6 +807,7 @@ public class GameManager : MonoBehaviour
             // for those tiles 
             if (currentNumOfSpecies > 1)
             {
+
                 scoreNum += currentNumOfSpecies * 2;
                 haveBonus = true;
             }
@@ -815,7 +818,6 @@ public class GameManager : MonoBehaviour
         }
 
         // make progress controller move up
-        Debug.Log("Amount to add " + scoreNum);
         StartCoroutine(progressController.AdjustProgress(scoreNum));
 
         // dont display reaction when rechecking the grid

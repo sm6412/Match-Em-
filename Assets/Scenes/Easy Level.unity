@@ -414,7 +414,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   scaleAmount: 0.81
-  tilePrefab: {fileID: 1660815834020562450, guid: d146028092a906a479a0bd7c57db71ac,
+  tilePrefab: {fileID: 7460972771885883082, guid: ffe6b8f203f8d7a4abcd9c9452e858d4,
     type: 3}
   startTiles:
   - {fileID: 749974141}
@@ -2075,6 +2075,11 @@ MonoBehaviour:
   successSound: {fileID: 8300000, guid: 5b5cbe5723d6424439771fbe86a1067b, type: 3}
   awesome: {fileID: 4922823786408661907, guid: ff1911cb513321440823c06249c95a98, type: 3}
   bonus: {fileID: 272301678217723540, guid: 7417fabf40c721547921a38e263b55d8, type: 3}
+  easy: 1
+  medium: 0
+  hard: 0
+  FramesCount: 250
+  AnimationTimeSeconds: 13
 --- !u!1 &1045271644
 GameObject:
   m_ObjectHideFlags: 0
@@ -3282,7 +3287,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ab925c7bdb4bb274c9f17993bff6f81b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  moveAmt: 0.01
+  moveAmt: 0.02
 --- !u!212 &2013217685
 SpriteRenderer:
   m_ObjectHideFlags: 0
@@ -3320,7 +3325,7 @@ SpriteRenderer:
   m_SortingLayerID: -1019697055
   m_SortingLayer: 3
   m_SortingOrder: 0
-  m_Sprite: {fileID: 21300000, guid: 0d6fb80cfc5100a4d9c8b636daee553d, type: 3}
+  m_Sprite: {fileID: 21300000, guid: 7e58f91074c4f6c4ab3f3112b6b268a9, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0
