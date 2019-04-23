@@ -13,7 +13,7 @@ public class StartScreen : MonoBehaviour
         // if space pressed start game
         if (Input.GetKeyDown(KeyCode.Space))
         {
-            SceneManager.LoadScene("Gameplay");
+            SceneManager.LoadScene("Easy Level");
         }
 
     }

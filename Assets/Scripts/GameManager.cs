@@ -57,6 +57,11 @@ public class GameManager : MonoBehaviour
     // create a reactions for when you get matches
     public GameObject awesome;
     public GameObject bonus;
+
+    // handle mode
+    public bool easy = true;
+    public bool medium = false;
+    public bool hard = false;
     
     // Start is called before the first frame update
     void Awake()
@@ -126,6 +131,154 @@ public class GameManager : MonoBehaviour
         }
         // end the rechecking 
         recheckingGrid = false;
+    }
+
+    void IdleHint()
+    {
+        bool foundMatch = false;
+        for (int i = 0; i < gm.getWidth(); i++)
+        {
+            if (foundMatch == true)
+            {
+                break;
+            }
+            for (int j = 0; j < gm.getHeight(); j++)
+            {
+                if (CheckAdjacent(i, j))
+                {
+                    // break loop
+                    MakeMatchesGlow(i, j);
+                    foundMatch = true;
+                    break;
+
+                }
+            }
+        }
+
+    }
+
+    void MakeMatchesGlow(int x, int y)
+    {
+
+        Vector2 pos;
+        if (matchPosY.Count >= 1)
+        {
+            int length = matchPosY.Count;
+            for (int i = 0; i < length; i++)
+            {
+                // destroy
+                List<int> currentTile = matchPosY[i];
+                int row = currentTile[0];
+                int col = currentTile[1];
+                pos = gm.tiles[row, col].transform.position;
+
+                // emit particles
+                (Instantiate(particles)).transform.position = pos;
+
+            }
+        }
+
+        if (matchPosX.Count >= 1)
+        {
+            int length = matchPosX.Count;
+            for (int i = 0; i < length; i++)
+            {
+                // destroy
+                List<int> currentTile = matchPosX[i];
+                int row = currentTile[0];
+                int col = currentTile[1];
+
+                pos = gm.tiles[row, col].transform.position;
+
+                // emit particles
+                (Instantiate(particles)).transform.position = pos;
+
+            }
+
+        }
+
+        // destroy switched tile 
+        pos = gm.tiles[x, y].transform.position;
+
+        // emit particles
+        (Instantiate(particles)).transform.position = pos;
+
+    }
+
+    bool CheckAdjacent(int x,int y)
+    {
+        matchPosX = new List<List<int>>();
+        matchPosY = new List<List<int>>();
+
+        // currrent tile info
+        GameObject currentTile = gm.tiles[x, y];
+        Tile currentTileScript = currentTile.GetComponent<Tile>();
+        currentGroup = currentTileScript.group;
+        if (currentGroup == null)
+        {
+            return false;
+        }
+
+
+        // check left tiles
+        if ((x != (gm.getWidth() - 1)))
+        {
+            for (int i = x + 1; i < gm.getWidth(); i++)
+            {
+                string result = checkMatch(i, y, "x");
+                if (result == "break")
+                {
+                    break;
+                }
+            }
+        }
+
+
+        // check right tiles 
+        if ((x != 0))
+        {
+            for (int i = x - 1; i >= 0; i--)
+            {
+                string result = checkMatch(i, y, "x");
+                if (result == "break")
+                {
+                    break;
+                }
+            }
+        }
+
+        // check bottom tiles 
+        if ((y != (gm.getHeight() - 1)))
+        {
+            for (int i = y + 1; i < gm.getHeight(); i++)
+            {
+                string result = checkMatch(x, i, "y");
+                if (result == "break")
+                {
+                    break;
+                }
+            }
+        }
+
+        // check top tiles 
+        if ((y != 0))
+        {
+            for (int i = y - 1; i >= 0; i--)
+            {
+                string result = checkMatch(x, i, "y");
+                if (result == "break")
+                {
+                    break;
+                }
+            }
+        }
+
+        if (matchPosX.Count >= 1 || matchPosY.Count >= 1)
+        {
+            return true;
+        }
+        return false;
+
     }
 
     // returns a boolean based on whether the tile has matches
@@ -466,17 +619,48 @@ public class GameManager : MonoBehaviour
         yield break;
     }
 
-    // when lerping is occuring, make sure the player cant move 
+    // when lerping is occuring, make sure the player cant move
+    
     private void Update()
     {
+
+        // check for lerping to enable player movement
         if (isLerping == false)
         {
             GameObject.Find("Player(Clone)").GetComponent<PlayerController>().switchCanMove(true);
+            // when the grid is not lerping or rechecking 
+            if (recheckingGrid==false)
+            {
+                CheckForHint();
+            }
         }
         else
         {
             GameObject.Find("Player(Clone)").GetComponent<PlayerController>().switchCanMove(false);
         }
+    }
+
+    float seconds = 0;
+    void CheckForHint()
+    {
+        if ((Input.GetKeyDown(KeyCode.LeftArrow) || Input.GetKeyDown(KeyCode.A)) || (Input.GetKeyDown(KeyCode.RightArrow) || Input.GetKeyDown(KeyCode.D))
+            || (Input.GetKeyDown(KeyCode.UpArrow) || Input.GetKeyDown(KeyCode.W)) || (Input.GetKeyDown(KeyCode.DownArrow) || Input.GetKeyDown(KeyCode.S)))
+        {
+            seconds = 0;
+        }
+        else
+        {
+            if (seconds >= 5f)
+            {
+                IdleHint();
+                seconds = 0;
+            }
+            else
+            {
+                seconds += Time.deltaTime;
+            }
+        }
+
     }
 
     // checks for when a match occurs
@@ -612,6 +796,7 @@ public class GameManager : MonoBehaviour
     // increment the player's score
     void IncrementScore()
     {
+        scoreNum = 0;
         bool haveBonus = false;
         for (int i = 0; i < 25; i++)
         {
@@ -630,7 +815,8 @@ public class GameManager : MonoBehaviour
         }
 
         // make progress controller move up
-        progressController.AdjustProgress(scoreNum);
+        Debug.Log("Amount to add " + scoreNum);
+        StartCoroutine(progressController.AdjustProgress(scoreNum));
 
         // dont display reaction when rechecking the grid
         if (recheckingGrid == false)

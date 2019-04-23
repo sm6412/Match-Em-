@@ -199,7 +199,7 @@ public class PlayerController : MonoBehaviour
         // B range
         // make red
         double pos = pc.transform.position.y;
-        if (pos >= -2.1 && pos < -1.19)
+        if (pos >= -2.2 && pos < -1.19)
         {
             if (isRed == false)
             {
@@ -233,7 +233,7 @@ public class PlayerController : MonoBehaviour
         }
         // A range
         // make yellow
-        else if (pos >= 0.4 && pos < 1.87)
+        else if (pos >= 0.4 && pos < 1.97)
         {
             if (isYellow == false)
             {
@@ -248,9 +248,9 @@ public class PlayerController : MonoBehaviour
             }
         }
         // A+ range
-        else if (pos >= 1.87 && pos < 3.11)
+        else if (pos >= 1.97 && pos < 3.11)
         {
-            if (isRed == false)
+            if (isGreen == false)
             {
                 Color newColor;
                 ColorUtility.TryParseHtmlString(greenString, out newColor);

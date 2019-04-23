@@ -18,22 +18,23 @@ public class ProgressController : MonoBehaviour
         currentY = this.transform.position.y;
     }
 
-    public void Update()
+
+    public IEnumerator AdjustProgress(int newScore)
     {
-        // if points gained, move up progress arrow
-        if (score != 0 && (this.transform.position.y+moveAmt) < 3.11)
+        int addAmt = newScore;
+        while(addAmt > 0)
         {
+            if ((this.transform.position.y + moveAmt) >= 3.11)
+            {
+                yield break;
+            }
             this.transform.position += new Vector3(0, moveAmt, 0);
             currentY = this.transform.position.y;
-            score--; 
-
+            addAmt--;
+            yield return null;
         }
-    }
+        yield break;
 
-    // when new points gained, add it to the score
-    public void AdjustProgress(int newScore)
-    {
-        score = newScore;
     }
 
 
