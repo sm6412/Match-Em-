@@ -58,6 +58,10 @@ public class End : MonoBehaviour
 
     CurrentGradeTracker finalGrade;
 
+    public bool easy;
+    public bool medium;
+    public bool hard;
+
     private void Start()
     {
 
@@ -74,11 +78,20 @@ public class End : MonoBehaviour
     void Update()
     {
         // restart the game when the spacebar is pressed
-        if (Input.GetKeyDown(KeyCode.Space))
+        if (Input.GetKeyDown(KeyCode.Space) && easy==true)
         {
             SceneManager.LoadScene("Easy Level");
         }
-        
+        else if (Input.GetKeyDown(KeyCode.Space) && medium == true)
+        {
+            SceneManager.LoadScene("Medium Level");
+        }
+        else if (Input.GetKeyDown(KeyCode.Space) && hard == true)
+        {
+            SceneManager.LoadScene("Hard Level");
+        }
+
+
     }
 
     // determine final grade

@@ -924,6 +924,9 @@ MonoBehaviour:
   speciesSR: {fileID: 1914378175}
   speciesNameText: {fileID: 1320784769}
   funfactText: {fileID: 1783156366}
+  easy: 1
+  medium: 0
+  hard: 0
 --- !u!114 &1807660156
 MonoBehaviour:
   m_ObjectHideFlags: 0

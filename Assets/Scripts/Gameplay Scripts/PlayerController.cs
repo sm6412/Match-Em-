@@ -66,7 +66,7 @@ public class PlayerController : MonoBehaviour
             moveNum += 20;
             moves.text = moveNum.ToString();
         }
-        else if (GameManager.Instance.easy == true)
+        else if (GameManager.Instance.medium == true)
         {
             moveNum += 10;
             moves.text = moveNum.ToString();

@@ -61,9 +61,9 @@ public class GameManager : MonoBehaviour
     public GameObject bonus;
 
     // handle mode
-    public bool easy = true;
-    public bool medium = false;
-    public bool hard = false;
+    public bool easy;
+    public bool medium;
+    public bool hard;
 
     bool canStartTimer = true;
 
@@ -445,7 +445,18 @@ public class GameManager : MonoBehaviour
             // if out of moves, end game 
             if (GameObject.Find("Player(Clone)").GetComponent<PlayerController>().moveNum == 0)
             {
-                SceneManager.LoadScene("End");
+                if (easy == true)
+                {
+                    SceneManager.LoadScene("Easy End");
+                }
+                else if (medium == true)
+                {
+                    SceneManager.LoadScene("Medium End");
+                }
+                else if (hard == true)
+                {
+                    SceneManager.LoadScene("Hard End");
+                }
             }
 
             // repopulate grid
@@ -463,7 +474,19 @@ public class GameManager : MonoBehaviour
             // if out of moves, end game
             if (GameObject.Find("Player(Clone)").GetComponent<PlayerController>().moveNum == 0)
             {
-                SceneManager.LoadScene("End");
+                if (easy == true)
+                {
+                    SceneManager.LoadScene("Easy End");
+                }
+                else if (medium == true)
+                {
+                    SceneManager.LoadScene("Medium End");
+                }
+                else if (hard == true)
+                {
+                    SceneManager.LoadScene("Hard End");
+                }
+                
             }
 
             // give the tile an effect

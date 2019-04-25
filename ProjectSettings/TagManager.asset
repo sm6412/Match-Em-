@@ -9,6 +9,10 @@ TagManager:
   - game manager
   - species tracker
   - music
+  - start button
+  - easy button
+  - medium button
+  - hard button
   layers:
   - Default
   - TransparentFX
