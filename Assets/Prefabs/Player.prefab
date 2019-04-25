@@ -197,6 +197,7 @@ MonoBehaviour:
     type: 3}
   greenGlow: {fileID: 7839467053582479336, guid: a13acdd85c3431048a48d3de517cd9ce,
     type: 3}
+  moveSound: {fileID: 8300000, guid: 7935551f773ec5042b38204dc16c6194, type: 3}
 --- !u!82 &6235987491843757878
 AudioSource:
   m_ObjectHideFlags: 0

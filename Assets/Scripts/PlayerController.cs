@@ -40,6 +40,9 @@ public class PlayerController : MonoBehaviour
     bool isRed = false;
     GameObject currentParticles = null;
 
+    public AudioClip moveSound;
+    private AudioSource audioSource;
+
 
     // Start is called before the first frame update
     void Start()
@@ -48,6 +51,7 @@ public class PlayerController : MonoBehaviour
         gm = GameObject.Find("Grid Maker").GetComponent<GridMaker>();
         pc = GameObject.Find("Progress Arrow").GetComponent<ProgressController>();
         gradeTracker = GameObject.Find("Current Grade").GetComponent<CurrentGradeTracker>();
+        audioSource = GetComponent<AudioSource>();
 
         // initialize player position
         this.transform.position = gm.tiles[2,2].transform.position;
@@ -55,7 +59,22 @@ public class PlayerController : MonoBehaviour
         matrixX = 2;
         matrixY = 2;
         gm.tiles[2, 2] = this.gameObject;
-        moves.text = moveNum.ToString();
+        
+
+        if(GameManager.Instance.easy == true)
+        {
+            moveNum += 20;
+            moves.text = moveNum.ToString();
+        }
+        else if (GameManager.Instance.easy == true)
+        {
+            moveNum += 10;
+            moves.text = moveNum.ToString();
+        }
+        else if(GameManager.Instance.hard==true)
+        {
+            moves.text = moveNum.ToString();
+        }
   
     }
 
@@ -66,6 +85,7 @@ public class PlayerController : MonoBehaviour
         // move player and determine switches
         if (canMove==true && (Input.GetKeyDown(KeyCode.DownArrow) || Input.GetKeyDown(KeyCode.S)) && ((matrixY+1)<gm.getHeight()))
         {
+            audioSource.PlayOneShot(moveSound);
             moveNum--;
             moves.text = moveNum.ToString();
             switchDown();
@@ -74,6 +94,7 @@ public class PlayerController : MonoBehaviour
         }
         else if (canMove==true && (Input.GetKeyDown(KeyCode.UpArrow) || Input.GetKeyDown(KeyCode.W)) && ((matrixY - 1) >= 0))
         {
+            audioSource.PlayOneShot(moveSound);
             moveNum--;
             moves.text = moveNum.ToString();
             switchUp();
@@ -81,6 +102,7 @@ public class PlayerController : MonoBehaviour
         }
         else if (canMove == true && (Input.GetKeyDown(KeyCode.RightArrow) || Input.GetKeyDown(KeyCode.D)) && ((matrixX + 1) < gm.getWidth()))
         {
+            audioSource.PlayOneShot(moveSound);
             moveNum--;
             moves.text = moveNum.ToString();
             switchRight();
@@ -88,6 +110,7 @@ public class PlayerController : MonoBehaviour
         }
         else if (canMove == true && (Input.GetKeyDown(KeyCode.LeftArrow) || Input.GetKeyDown(KeyCode.A)) && ((matrixX - 1) >= 0))
         {
+            audioSource.PlayOneShot(moveSound);
             moveNum--;
             moves.text = moveNum.ToString();
             switchLeft();

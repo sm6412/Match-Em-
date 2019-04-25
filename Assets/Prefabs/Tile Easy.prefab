@@ -112,10 +112,10 @@ MonoBehaviour:
   sprite18: {fileID: 21300000, guid: c422f0c5f4a810a4e87ec2660ba2a98f, type: 3}
   sprite19: {fileID: 21300000, guid: 5c802df1802cbad489f4d25a8fd9c0c4, type: 3}
   sprite20: {fileID: 21300000, guid: e5bff0f2936e1ea489b348d2ffe88d69, type: 3}
-  sprite21: {fileID: 21300000, guid: b6ebba0aa725f5e448485ab0d9fe7f72, type: 3}
-  sprite22: {fileID: 21300000, guid: fe7378952e2bcdd44bf2bdef3e8a53ef, type: 3}
-  sprite23: {fileID: 21300000, guid: c4984e591ab075742a633b993c0ef25c, type: 3}
-  sprite24: {fileID: 21300000, guid: b6e0a20fa938eb9448c8460ce4d87267, type: 3}
-  sprite25: {fileID: 21300000, guid: c44c2815ecc2e5445b396dc41dfc6669, type: 3}
+  sprite21: {fileID: 21300000, guid: 034c0ed911a968645aa813493f62886f, type: 3}
+  sprite22: {fileID: 21300000, guid: c03815d5794eefb43891a7f3381234d9, type: 3}
+  sprite23: {fileID: 21300000, guid: cfd864b4383919c43b3d8dac86cf903a, type: 3}
+  sprite24: {fileID: 21300000, guid: 3eeff36aee1ee8740af15eebd1f12a64, type: 3}
+  sprite25: {fileID: 21300000, guid: 220bfcc5fee3bac4c995cd3a32f9e3ae, type: 3}
   type: 0
   group: 0

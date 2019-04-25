@@ -64,3 +64,6 @@ TagManager:
   - name: tiles
     uniqueID: 3275270241
     locked: 0
+  - name: hint particles
+    uniqueID: 3562876035
+    locked: 0

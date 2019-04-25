@@ -2071,6 +2071,8 @@ MonoBehaviour:
   lerpSpeed: 0.3
   particles: {fileID: 6033062650685479147, guid: d30d9b2087d3e044eac9bc7c7dd410a0,
     type: 3}
+  hintParticles: {fileID: 560637605331435883, guid: c72abd62def91b348b04837863015715,
+    type: 3}
   scoreNum: 0
   successSound: {fileID: 8300000, guid: 5b5cbe5723d6424439771fbe86a1067b, type: 3}
   awesome: {fileID: 4922823786408661907, guid: ff1911cb513321440823c06249c95a98, type: 3}
@@ -2079,7 +2081,10 @@ MonoBehaviour:
   medium: 0
   hard: 0
   FramesCount: 250
-  AnimationTimeSeconds: 13
+  AnimationTimeSeconds: 25
+  reactionTimer: 1
+  reactionSpeed: 15
+  waitTimeForHint: 5
 --- !u!1 &1045271644
 GameObject:
   m_ObjectHideFlags: 0
@@ -3089,7 +3094,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1666867676}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: -0.15196617, y: -0.04, z: 0}
+  m_LocalPosition: {x: -0.1519661, y: -0.04, z: 0}
   m_LocalScale: {x: 0.8188466, y: 0.8188466, z: 0.8188466}
   m_Children: []
   m_Father: {fileID: 665125102}
@@ -3287,7 +3292,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ab925c7bdb4bb274c9f17993bff6f81b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  moveAmt: 0.02
+  moveAmt: 0.08
 --- !u!212 &2013217685
 SpriteRenderer:
   m_ObjectHideFlags: 0

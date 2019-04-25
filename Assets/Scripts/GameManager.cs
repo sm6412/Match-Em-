@@ -35,6 +35,7 @@ public class GameManager : MonoBehaviour
 
     // particle effects 
     public GameObject particles;
+    public GameObject hintParticles;
 
     // score information
     public int scoreNum = 0;
@@ -53,6 +54,7 @@ public class GameManager : MonoBehaviour
 
     // sound effects for when the players makes a match
     public AudioClip successSound;
+    
 
     // create a reactions for when you get matches
     public GameObject awesome;
@@ -62,7 +64,9 @@ public class GameManager : MonoBehaviour
     public bool easy = true;
     public bool medium = false;
     public bool hard = false;
-    
+
+    bool canStartTimer = true;
+
     // Start is called before the first frame update
     void Awake()
     {
@@ -173,7 +177,7 @@ public class GameManager : MonoBehaviour
                 pos = gm.tiles[row, col].transform.position;
 
                 // emit particles
-                (Instantiate(particles)).transform.position = pos;
+                (Instantiate(hintParticles)).transform.position = pos;
 
             }
         }
@@ -191,7 +195,7 @@ public class GameManager : MonoBehaviour
                 pos = gm.tiles[row, col].transform.position;
 
                 // emit particles
-                (Instantiate(particles)).transform.position = pos;
+                (Instantiate(hintParticles)).transform.position = pos;
 
             }
 
@@ -201,9 +205,10 @@ public class GameManager : MonoBehaviour
         pos = gm.tiles[x, y].transform.position;
 
         // emit particles
-        (Instantiate(particles)).transform.position = pos;
+        (Instantiate(hintParticles)).transform.position = pos;
 
     }
+
 
     bool CheckAdjacent(int x,int y)
     {
@@ -214,11 +219,6 @@ public class GameManager : MonoBehaviour
         GameObject currentTile = gm.tiles[x, y];
         Tile currentTileScript = currentTile.GetComponent<Tile>();
         currentGroup = currentTileScript.group;
-        if (currentGroup == null)
-        {
-            return false;
-        }
-
 
         // check left tiles
         if ((x != (gm.getWidth() - 1)))
@@ -423,7 +423,11 @@ public class GameManager : MonoBehaviour
 
         if (matchPosY.Count>=2 || matchPosX.Count>=2)
         {
-            audioSource.PlayOneShot(successSound);
+            if(recheckingGrid == false)
+            {
+                audioSource.PlayOneShot(successSound);
+            }
+            
           // if the grid recheck is still occuring and a match
           // is found, change found matches to true
             if (recheckingGrid == true)
@@ -580,24 +584,51 @@ public class GameManager : MonoBehaviour
     }
 
     GameObject currentReaction = null;
-    public int rotationSpeed;
+    public float reactionTimer;
+    public int reactionSpeed;
     private IEnumerator DisplayReaction(GameObject reaction)
     {
         
         Destroy(currentReaction);
         currentReaction = Instantiate(reaction);
+        // move left
         float rotationAmt = 0;
-        while (rotationAmt != 10)
+        while (currentReaction.transform.rotation.z < .10)
         {
-            rotationAmt += 1;
+            rotationAmt += Time.deltaTime*reactionSpeed;
             currentReaction.transform.Rotate(0, 0, rotationAmt);
             yield return null;
             
         }
+        // pause
+        float timer = reactionTimer;
+        while(timer > 0)
+        {
+            timer -= Time.deltaTime;
+        }
+        // move right
+        while (currentReaction.transform.rotation.z >= -.10)
+        {
+            Debug.Log(currentReaction.transform.rotation.z);
+            rotationAmt -= Time.deltaTime*reactionSpeed;
+            currentReaction.transform.Rotate(0, 0, rotationAmt);
+            yield return null;
+
+        }
+        // pause
+        timer = reactionTimer;
+        while (timer > 0)
+        {
+            Debug.Log("Pausing");
+            timer -= Time.deltaTime;
+        }
+        // destroy
         Destroy(currentReaction);
         yield break;
 
     }
+
+
 
 
 
@@ -625,26 +656,33 @@ public class GameManager : MonoBehaviour
     
     private void Update()
     {
-
+        Debug.Log("can start timer " + canStartTimer);
         // check for lerping to enable player movement
         if (isLerping == false)
         {
             GameObject.Find("Player(Clone)").GetComponent<PlayerController>().switchCanMove(true);
             // when the grid is not lerping or rechecking 
-            if (recheckingGrid==false)
+            if (recheckingGrid==false && canStartTimer==true && easy==true)
             {
                 CheckForHint();
+            }
+            else
+            {
+                seconds = 0;
             }
         }
         else
         {
+            seconds = 0;
             GameObject.Find("Player(Clone)").GetComponent<PlayerController>().switchCanMove(false);
         }
     }
 
     float seconds = 0;
+    public float waitTimeForHint;
     void CheckForHint()
     {
+
         if ((Input.GetKeyDown(KeyCode.LeftArrow) || Input.GetKeyDown(KeyCode.A)) || (Input.GetKeyDown(KeyCode.RightArrow) || Input.GetKeyDown(KeyCode.D))
             || (Input.GetKeyDown(KeyCode.UpArrow) || Input.GetKeyDown(KeyCode.W)) || (Input.GetKeyDown(KeyCode.DownArrow) || Input.GetKeyDown(KeyCode.S)))
         {
@@ -652,7 +690,7 @@ public class GameManager : MonoBehaviour
         }
         else
         {
-            if (seconds >= 5f)
+            if (seconds >= waitTimeForHint)
             {
                 IdleHint();
                 seconds = 0;
