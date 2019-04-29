@@ -25,6 +25,7 @@ public class GameManager : MonoBehaviour
     // x and y axis 
     List<List<int>> matchPosX;
     List<List<int>> matchPosY;
+    List<List<int>> additionalMatches;
 
     // current tile color you compare to 
     int currentGroup;
@@ -35,7 +36,13 @@ public class GameManager : MonoBehaviour
 
     // particle effects 
     public GameObject particles;
-    public GameObject hintParticles;
+
+    // hint particles 
+    public GameObject hintGreenParticles;
+    public GameObject hintPinkParticles;
+    public GameObject hintRedParticles;
+    public GameObject hintYellowParticles;
+    public GameObject hintOrangeParticles;
 
     // score information
     public int scoreNum = 0;
@@ -150,63 +157,118 @@ public class GameManager : MonoBehaviour
             {
                 if (CheckAdjacent(i, j))
                 {
-                    // break loop
-                    MakeMatchesGlow(i, j);
-                    foundMatch = true;
-                    break;
+                    // make sure there are other animals of that
+                    // same type somewhere else in the matrix 
+                    if (otherMatches(i,j))
+                    {
+                        MakeMatchesGlow(i, j);
+                        foundMatch = true;
+                        break;
 
+                    }
                 }
             }
         }
 
     }
 
+    bool otherMatches(int x, int y)
+    {
+        additionalMatches = new List<List<int>>();
+        GameObject currentTile = gm.tiles[x, y];
+        Tile currentTileScript = currentTile.GetComponent<Tile>();
+        currentGroup = currentTileScript.group;
+
+        for (int i = 0; i < gm.getWidth(); i++)
+        {
+            for (int j = 0; j < gm.getHeight(); j++)
+            {
+                GameObject compareTile = gm.tiles[i, j];
+                if (compareTile.tag != "player")
+                {
+                    Tile compareTileScript = compareTile.GetComponent<Tile>();
+                    int compareGroup = compareTileScript.group;
+
+                    List<int> currentMatch = new List<int>();
+                    if (compareGroup == currentGroup)
+                    {
+                        currentMatch.Add(i);
+                        currentMatch.Add(j);
+                        additionalMatches.Add(currentMatch);
+                    }
+
+                }
+            }
+        }
+
+        if (additionalMatches.Count >= 3)
+        {
+            return true;
+
+        }
+
+        return false;
+
+    }
+
+
     void MakeMatchesGlow(int x, int y)
     {
+        GameObject mainTile = gm.tiles[x, y];
+        Tile mainTileScript = mainTile.GetComponent<Tile>();
+        int hintColor = mainTileScript.group;
 
         Vector2 pos;
-        if (matchPosY.Count >= 1)
+        // make tiles of the same animal group glow
+        for (int i=0; i < additionalMatches.Count; i++)
         {
-            int length = matchPosY.Count;
-            for (int i = 0; i < length; i++)
-            {
-                // destroy
-                List<int> currentTile = matchPosY[i];
-                int row = currentTile[0];
-                int col = currentTile[1];
-                pos = gm.tiles[row, col].transform.position;
+            List<int> currentTile = additionalMatches[i];
+            int row = currentTile[0];
+            int col = currentTile[1];
+            pos = gm.tiles[row, col].transform.position;
 
-                // emit particles
-                (Instantiate(hintParticles)).transform.position = pos;
-
-            }
-        }
-
-        if (matchPosX.Count >= 1)
-        {
-            int length = matchPosX.Count;
-            for (int i = 0; i < length; i++)
-            {
-                // destroy
-                List<int> currentTile = matchPosX[i];
-                int row = currentTile[0];
-                int col = currentTile[1];
-
-                pos = gm.tiles[row, col].transform.position;
-
-                // emit particles
-                (Instantiate(hintParticles)).transform.position = pos;
-
-            }
+            // emit particles
+            HintParticles(pos, hintColor);
 
         }
 
-        // destroy switched tile 
-        pos = gm.tiles[x, y].transform.position;
+    }
 
-        // emit particles
-        (Instantiate(hintParticles)).transform.position = pos;
+    void HintParticles(Vector2 pos, int hintColor)
+    {
+        if (hintColor == 1)
+        {
+            (Instantiate(hintGreenParticles)).transform.position = pos;
+            
+        }
+        else if (hintColor == 2)
+        {
+            (Instantiate(hintPinkParticles)).transform.position = pos;
+        }
+        else if (hintColor == 3)
+        {
+            (Instantiate(hintRedParticles)).transform.position = pos;
 
+        }
+        else if (hintColor == 4)
+        {
+            (Instantiate(hintYellowParticles)).transform.position = pos;
+            
+        }
+        else if (hintColor == 5)
+        {
+            (Instantiate(hintOrangeParticles)).transform.position = pos;
+        }
+    }
+
+    void RemoveHintParticles()
+    {
+        GameObject[] hintParticlesList = GameObject.FindGameObjectsWithTag("hint");
+        foreach (GameObject hintParticle in hintParticlesList)
+        {
+            GameObject.Destroy(hintParticle);
+        }
+            
     }
 
 
@@ -217,6 +279,11 @@ public class GameManager : MonoBehaviour
 
         // currrent tile info
         GameObject currentTile = gm.tiles[x, y];
+        if (currentTile.tag == "player")
+        {
+            return false;
+        }
+
         Tile currentTileScript = currentTile.GetComponent<Tile>();
         currentGroup = currentTileScript.group;
 
@@ -442,23 +509,6 @@ public class GameManager : MonoBehaviour
             // destroy tiles 
             RemoveMatches(x,y);
 
-            // if out of moves, end game 
-            if (GameObject.Find("Player(Clone)").GetComponent<PlayerController>().moveNum == 0)
-            {
-                if (easy == true)
-                {
-                    SceneManager.LoadScene("Easy End");
-                }
-                else if (medium == true)
-                {
-                    SceneManager.LoadScene("Medium End");
-                }
-                else if (hard == true)
-                {
-                    SceneManager.LoadScene("Hard End");
-                }
-            }
-
             // repopulate grid
             Repopulate(x,y);
 
@@ -471,24 +521,6 @@ public class GameManager : MonoBehaviour
         }
         else
         {
-            // if out of moves, end game
-            if (GameObject.Find("Player(Clone)").GetComponent<PlayerController>().moveNum == 0)
-            {
-                if (easy == true)
-                {
-                    SceneManager.LoadScene("Easy End");
-                }
-                else if (medium == true)
-                {
-                    SceneManager.LoadScene("Medium End");
-                }
-                else if (hard == true)
-                {
-                    SceneManager.LoadScene("Hard End");
-                }
-                
-            }
-
             // give the tile an effect
             StartCoroutine(TileEffect(currentTile,gm.scaleAmount));
         }
@@ -632,7 +664,6 @@ public class GameManager : MonoBehaviour
         // move right
         while (currentReaction.transform.rotation.z >= -.10)
         {
-            Debug.Log(currentReaction.transform.rotation.z);
             rotationAmt -= Time.deltaTime*reactionSpeed;
             currentReaction.transform.Rotate(0, 0, rotationAmt);
             yield return null;
@@ -642,7 +673,6 @@ public class GameManager : MonoBehaviour
         timer = reactionTimer;
         while (timer > 0)
         {
-            Debug.Log("Pausing");
             timer -= Time.deltaTime;
         }
         // destroy
@@ -679,7 +709,7 @@ public class GameManager : MonoBehaviour
     
     private void Update()
     {
-        Debug.Log("can start timer " + canStartTimer);
+
         // check for lerping to enable player movement
         if (isLerping == false)
         {
@@ -768,6 +798,12 @@ public class GameManager : MonoBehaviour
     // removes matches from grid
     public void RemoveMatches(int x, int y)
     {
+        // remove hint particles from screen
+        if (easy == true)
+        {
+            RemoveHintParticles();
+        }
+        
         // reset list that holds all the species 
         resetNumOfEachSpecies();
 

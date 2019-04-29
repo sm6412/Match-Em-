@@ -56,19 +56,12 @@ public class End : MonoBehaviour
     // most matched species fun fact text
     public Text funfactText;
 
-    CurrentGradeTracker finalGrade;
-
     public bool easy;
     public bool medium;
     public bool hard;
 
     private void Start()
     {
-
-        finalGrade = GameObject.Find("Current Grade").GetComponent<CurrentGradeTracker>();
-
-        // figure out final grade
-        FindScore(finalGrade.currentGrade);
 
         // get the species with the higest matches
         DisplaySpecies(SpeciesTracker.mostSpecies);
@@ -94,35 +87,6 @@ public class End : MonoBehaviour
 
     }
 
-    // determine final grade
-    void FindScore(string finalGrade)
-    {
-        if (finalGrade == "B")
-        {
-            grade.text = "B";
-            response.text = "Keep at it!";
-
-        }
-        else if (finalGrade == "B+")
-        {
-            grade.text = "B+";
-            response.text = "Good!";
-
-        }
-        else if (finalGrade == "A")
-        {
-            grade.text = "A";
-            response.text = "Amazing!";
-
-        }
-        else if (finalGrade == "A+")
-        {
-            grade.text = "A+";
-            response.text = "You knocked my socks off!";
-
-        }
-
-    }
 
     // display most matched species
     void DisplaySpecies(int type)

@@ -16,23 +16,18 @@ public class PlayerController : MonoBehaviour
     int matrixX;
     int matrixY;
 
-    // amount of moves player can make
-    public int moveNum;
-
-    // ref to text that displays moves 
-    public TextMesh moves;
 
     // bool to determine whether the player can move or not
     public bool canMove = true;
 
-    // ref to current grade tracker 
-    CurrentGradeTracker gradeTracker;
 
     // particle effects
     public GameObject redGlow;
     public GameObject orangeGlow;
     public GameObject yellowGlow;
     public GameObject greenGlow;
+
+    // available tiles 
 
     bool isGreen = false;
     bool isYellow = false;
@@ -50,7 +45,6 @@ public class PlayerController : MonoBehaviour
         // ref to grid maker 
         gm = GameObject.Find("Grid Maker").GetComponent<GridMaker>();
         pc = GameObject.Find("Progress Arrow").GetComponent<ProgressController>();
-        gradeTracker = GameObject.Find("Current Grade").GetComponent<CurrentGradeTracker>();
         audioSource = GetComponent<AudioSource>();
 
         // initialize player position
@@ -59,22 +53,10 @@ public class PlayerController : MonoBehaviour
         matrixX = 2;
         matrixY = 2;
         gm.tiles[2, 2] = this.gameObject;
+
+        SetAdjacentTiles();
         
 
-        if(GameManager.Instance.easy == true)
-        {
-            moveNum += 20;
-            moves.text = moveNum.ToString();
-        }
-        else if (GameManager.Instance.medium == true)
-        {
-            moveNum += 10;
-            moves.text = moveNum.ToString();
-        }
-        else if(GameManager.Instance.hard==true)
-        {
-            moves.text = moveNum.ToString();
-        }
   
     }
 
@@ -86,34 +68,30 @@ public class PlayerController : MonoBehaviour
         if (canMove==true && (Input.GetKeyDown(KeyCode.DownArrow) || Input.GetKeyDown(KeyCode.S)) && ((matrixY+1)<gm.getHeight()))
         {
             audioSource.PlayOneShot(moveSound);
-            moveNum--;
-            moves.text = moveNum.ToString();
             switchDown();
+            SetAdjacentTiles();
 
 
         }
         else if (canMove==true && (Input.GetKeyDown(KeyCode.UpArrow) || Input.GetKeyDown(KeyCode.W)) && ((matrixY - 1) >= 0))
         {
             audioSource.PlayOneShot(moveSound);
-            moveNum--;
-            moves.text = moveNum.ToString();
             switchUp();
+            SetAdjacentTiles();
 
         }
         else if (canMove == true && (Input.GetKeyDown(KeyCode.RightArrow) || Input.GetKeyDown(KeyCode.D)) && ((matrixX + 1) < gm.getWidth()))
         {
             audioSource.PlayOneShot(moveSound);
-            moveNum--;
-            moves.text = moveNum.ToString();
             switchRight();
+            SetAdjacentTiles();
 
         }
         else if (canMove == true && (Input.GetKeyDown(KeyCode.LeftArrow) || Input.GetKeyDown(KeyCode.A)) && ((matrixX - 1) >= 0))
         {
             audioSource.PlayOneShot(moveSound);
-            moveNum--;
-            moves.text = moveNum.ToString();
             switchLeft();
+            SetAdjacentTiles();
 
         }
     }
@@ -124,6 +102,30 @@ public class PlayerController : MonoBehaviour
 
         matrixX = x;
         matrixY = y;
+
+    }
+
+    void SetAdjacentTiles()
+    {
+        // destroy particles for previous available tiles to move to
+        GameObject[] hintParticlesList = GameObject.FindGameObjectsWithTag("available");
+        foreach (GameObject hintParticle in hintParticlesList)
+        {
+            GameObject.Destroy(hintParticle);
+        }
+
+        Vector2 pos;
+        // set top tile
+        pos = pos = gm.tiles[matrixX, matrixY+1].transform.position;
+
+        // set bottom tile
+        pos = gm.tiles[matrixX, matrixY - 1].transform.position;
+
+        // set right tile
+        pos = gm.tiles[matrixX + 1, matrixY].transform.position;
+
+        // set left tile 
+        pos = gm.tiles[matrixX - 1, matrixY].transform.position;
 
     }
 
@@ -229,7 +231,6 @@ public class PlayerController : MonoBehaviour
                 Color newColor;
                 ColorUtility.TryParseHtmlString(redString, out newColor);
                 this.GetComponent<SpriteRenderer>().color = newColor;
-                gradeTracker.setCurrentGrade("B");
                 isRed = true;
                 // add particles 
                 currentParticles = Instantiate(redGlow);
@@ -244,7 +245,6 @@ public class PlayerController : MonoBehaviour
                 Color newColor;
                 ColorUtility.TryParseHtmlString(orangeString, out newColor);
                 this.GetComponent<SpriteRenderer>().color = newColor;
-                gradeTracker.setCurrentGrade("B+");
                 isOrange = true;
 
                 // set particles 
@@ -263,7 +263,6 @@ public class PlayerController : MonoBehaviour
                 Color newColor;
                 ColorUtility.TryParseHtmlString(yellowString, out newColor);
                 this.GetComponent<SpriteRenderer>().color = newColor;
-                gradeTracker.setCurrentGrade("A");
                 isYellow = true;
                 // add particles
                 Destroy(currentParticles);
@@ -278,7 +277,6 @@ public class PlayerController : MonoBehaviour
                 Color newColor;
                 ColorUtility.TryParseHtmlString(greenString, out newColor);
                 this.GetComponent<SpriteRenderer>().color = newColor;
-                gradeTracker.setCurrentGrade("A+");
                 isRed = true;
                 // add particles
                 Destroy(currentParticles);
