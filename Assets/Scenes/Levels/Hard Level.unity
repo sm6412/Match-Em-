@@ -921,7 +921,7 @@ SpriteRenderer:
   m_AutoUVMaxAngle: 89
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: -1227239377
-  m_SortingLayer: 2
+  m_SortingLayer: 4
   m_SortingOrder: 0
   m_Sprite: {fileID: 0}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
@@ -1212,7 +1212,7 @@ SpriteRenderer:
   m_AutoUVMaxAngle: 89
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: -1227239377
-  m_SortingLayer: 2
+  m_SortingLayer: 4
   m_SortingOrder: 0
   m_Sprite: {fileID: 0}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
@@ -2071,8 +2071,11 @@ MonoBehaviour:
   lerpSpeed: 0.3
   particles: {fileID: 6033062650685479147, guid: d30d9b2087d3e044eac9bc7c7dd410a0,
     type: 3}
-  hintParticles: {fileID: 560637605331435883, guid: c72abd62def91b348b04837863015715,
-    type: 3}
+  hintGreenParticles: {fileID: 0}
+  hintPinkParticles: {fileID: 0}
+  hintRedParticles: {fileID: 0}
+  hintYellowParticles: {fileID: 0}
+  hintOrangeParticles: {fileID: 0}
   scoreNum: 0
   successSound: {fileID: 8300000, guid: 5b5cbe5723d6424439771fbe86a1067b, type: 3}
   awesome: {fileID: 4922823786408661907, guid: ff1911cb513321440823c06249c95a98, type: 3}
@@ -2294,7 +2297,7 @@ SpriteRenderer:
   m_AutoUVMaxDistance: 0.5
   m_AutoUVMaxAngle: 89
   m_LightmapParameters: {fileID: 0}
-  m_SortingLayerID: -1227239377
+  m_SortingLayerID: -1019697055
   m_SortingLayer: 2
   m_SortingOrder: 0
   m_Sprite: {fileID: 21300000, guid: 1e16085861de5c24187063df77460b20, type: 3}
@@ -3235,7 +3238,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ab925c7bdb4bb274c9f17993bff6f81b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  moveAmt: 0.08
+  moveAmt: 0.06
 --- !u!212 &2013217685
 SpriteRenderer:
   m_ObjectHideFlags: 0
@@ -3270,8 +3273,8 @@ SpriteRenderer:
   m_AutoUVMaxDistance: 0.5
   m_AutoUVMaxAngle: 89
   m_LightmapParameters: {fileID: 0}
-  m_SortingLayerID: -1019697055
-  m_SortingLayer: 3
+  m_SortingLayerID: -1227239377
+  m_SortingLayer: 4
   m_SortingOrder: 0
   m_Sprite: {fileID: 21300000, guid: 7e58f91074c4f6c4ab3f3112b6b268a9, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}

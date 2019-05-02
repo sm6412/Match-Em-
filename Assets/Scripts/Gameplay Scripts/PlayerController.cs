@@ -83,28 +83,32 @@ public class PlayerController : MonoBehaviour
         {
             // if the user clicks on the start 
             // button, start the gameplay scene
-            if (hit.collider.tag == "tile" && hit.collider.transform.position==gm.gridHolder[matrixX, matrixY - 1].transform.position)
+            if ((matrixY-1>=0) && hit.collider.tag == "tile" && hit.collider.transform.position == gm.gridHolder[matrixX, matrixY - 1].transform.position)
             {
+                GameManager.Instance.RemoveHintParticles();
                 audioSource.PlayOneShot(moveSound);
                 switchUp();
                 SetAdjacentTiles();
             }
-            else if (hit.collider.tag == "tile" && hit.collider.transform.position == gm.gridHolder[matrixX, matrixY + 1].transform.position)
+            else if ((matrixY+1 <= (gm.getHeight()-1)) && hit.collider.tag == "tile" && hit.collider.transform.position == gm.gridHolder[matrixX, matrixY + 1].transform.position)
             {
+                GameManager.Instance.RemoveHintParticles();
                 audioSource.PlayOneShot(moveSound);
                 switchDown();
                 SetAdjacentTiles();
 
             }
-            else if (hit.collider.tag == "tile" && hit.collider.transform.position == gm.gridHolder[matrixX + 1, matrixY].transform.position)
+            else if ((matrixX + 1 <= (gm.getWidth() - 1)) && hit.collider.tag == "tile" && hit.collider.transform.position == gm.gridHolder[matrixX + 1, matrixY].transform.position)
             {
+                GameManager.Instance.RemoveHintParticles();
                 audioSource.PlayOneShot(moveSound);
                 switchRight();
                 SetAdjacentTiles();
 
             }
-            else if (hit.collider.tag == "tile" && hit.collider.transform.position == gm.gridHolder[matrixX - 1, matrixY].transform.position)
+            else if ((matrixX - 1 >= 0)  && hit.collider.tag == "tile" && hit.collider.transform.position == gm.gridHolder[matrixX - 1, matrixY].transform.position)
             {
+                GameManager.Instance.RemoveHintParticles();
                 audioSource.PlayOneShot(moveSound);
                 switchLeft();
                 SetAdjacentTiles();
@@ -128,24 +132,43 @@ public class PlayerController : MonoBehaviour
     GameObject leftTile;
     void SetAdjacentTiles()
     {
+        Debug.Log("Y pos is " + matrixY);
         // Stop all the coroutines
         StopAllCoroutines();
 
-        // set top tile
-        topTile = gm.tiles[matrixX, matrixY+1];
-        StartCoroutine(Breath(topTile));
+        if (matrixY + 1< (gm.getHeight()))
+        {
+            topTile = gm.tiles[matrixX, matrixY + 1];
+            StartCoroutine(Breath(topTile));
+
+        }
+
 
         // set bottom tile
-        bottomTile = gm.tiles[matrixX, matrixY - 1];
-        StartCoroutine(Breath(bottomTile));
+        if (matrixY - 1 >= 0)
+        {
+            bottomTile = gm.tiles[matrixX, matrixY - 1];
+            StartCoroutine(Breath(bottomTile));
+
+        }
+
 
         // set right tile
-        rightTile = gm.tiles[matrixX + 1, matrixY];
-        StartCoroutine(Breath(rightTile));
+        if (matrixX + 1 < (gm.getWidth()))
+        {
+            rightTile = gm.tiles[matrixX + 1, matrixY];
+            StartCoroutine(Breath(rightTile));
 
-        // set left tile 
-        leftTile = gm.tiles[matrixX - 1, matrixY];
-        StartCoroutine(Breath(leftTile));
+        }
+
+        if (matrixX - 1 >= 0)
+        {
+            // set left tile 
+            leftTile = gm.tiles[matrixX - 1, matrixY];
+            StartCoroutine(Breath(leftTile));
+
+        }
+
 
     }
 

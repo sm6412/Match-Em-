@@ -261,7 +261,7 @@ public class GameManager : MonoBehaviour
         }
     }
 
-    void RemoveHintParticles()
+    public void RemoveHintParticles()
     {
         GameObject[] hintParticlesList = GameObject.FindGameObjectsWithTag("hint");
         foreach (GameObject hintParticle in hintParticlesList)
