@@ -37,7 +37,6 @@ public class PlayerController : MonoBehaviour
     public AudioClip moveSound;
     private AudioSource audioSource;
 
-    bool hasMoved = false;
 
 
 
@@ -56,7 +55,6 @@ public class PlayerController : MonoBehaviour
         matrixY = 2;
         gm.tiles[2, 2] = this.gameObject;
 
-        SetAdjacentTiles();
         
 
   
@@ -88,14 +86,12 @@ public class PlayerController : MonoBehaviour
                 GameManager.Instance.RemoveHintParticles();
                 audioSource.PlayOneShot(moveSound);
                 switchUp();
-                SetAdjacentTiles();
             }
             else if ((matrixY+1 <= (gm.getHeight()-1)) && hit.collider.tag == "tile" && hit.collider.transform.position == gm.gridHolder[matrixX, matrixY + 1].transform.position)
             {
                 GameManager.Instance.RemoveHintParticles();
                 audioSource.PlayOneShot(moveSound);
                 switchDown();
-                SetAdjacentTiles();
 
             }
             else if ((matrixX + 1 <= (gm.getWidth() - 1)) && hit.collider.tag == "tile" && hit.collider.transform.position == gm.gridHolder[matrixX + 1, matrixY].transform.position)
@@ -103,7 +99,6 @@ public class PlayerController : MonoBehaviour
                 GameManager.Instance.RemoveHintParticles();
                 audioSource.PlayOneShot(moveSound);
                 switchRight();
-                SetAdjacentTiles();
 
             }
             else if ((matrixX - 1 >= 0)  && hit.collider.tag == "tile" && hit.collider.transform.position == gm.gridHolder[matrixX - 1, matrixY].transform.position)
@@ -111,7 +106,6 @@ public class PlayerController : MonoBehaviour
                 GameManager.Instance.RemoveHintParticles();
                 audioSource.PlayOneShot(moveSound);
                 switchLeft();
-                SetAdjacentTiles();
 
             }
         }
@@ -126,51 +120,6 @@ public class PlayerController : MonoBehaviour
 
     }
 
-    GameObject topTile;
-    GameObject bottomTile;
-    GameObject rightTile;
-    GameObject leftTile;
-    void SetAdjacentTiles()
-    {
-        Debug.Log("Y pos is " + matrixY);
-        // Stop all the coroutines
-        StopAllCoroutines();
-
-        if (matrixY + 1< (gm.getHeight()))
-        {
-            topTile = gm.tiles[matrixX, matrixY + 1];
-            StartCoroutine(Breath(topTile));
-
-        }
-
-
-        // set bottom tile
-        if (matrixY - 1 >= 0)
-        {
-            bottomTile = gm.tiles[matrixX, matrixY - 1];
-            StartCoroutine(Breath(bottomTile));
-
-        }
-
-
-        // set right tile
-        if (matrixX + 1 < (gm.getWidth()))
-        {
-            rightTile = gm.tiles[matrixX + 1, matrixY];
-            StartCoroutine(Breath(rightTile));
-
-        }
-
-        if (matrixX - 1 >= 0)
-        {
-            // set left tile 
-            leftTile = gm.tiles[matrixX - 1, matrixY];
-            StartCoroutine(Breath(leftTile));
-
-        }
-
-
-    }
 
     private float _currentScale = InitScale;
     private const float TargetScale = 0.81f;

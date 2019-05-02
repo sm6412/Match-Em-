@@ -25,7 +25,7 @@ public class GameManager : MonoBehaviour
     // x and y axis 
     List<List<int>> matchPosX;
     List<List<int>> matchPosY;
-    List<List<int>> additionalMatches;
+    
 
     // current tile color you compare to 
     int currentGroup;
@@ -37,12 +37,7 @@ public class GameManager : MonoBehaviour
     // particle effects 
     public GameObject particles;
 
-    // hint particles 
-    public GameObject hintGreenParticles;
-    public GameObject hintPinkParticles;
-    public GameObject hintRedParticles;
-    public GameObject hintYellowParticles;
-    public GameObject hintOrangeParticles;
+
 
     // score information
     public int scoreNum = 0;
@@ -73,6 +68,7 @@ public class GameManager : MonoBehaviour
     public bool hard;
 
     bool canStartTimer = true;
+    HintDetection hd;
 
     // Start is called before the first frame update
     void Awake()
@@ -85,6 +81,7 @@ public class GameManager : MonoBehaviour
         gm = GameObject.Find("Grid Maker").GetComponent<GridMaker>();
         progressController = GameObject.Find("Progress Arrow").GetComponent<ProgressController>();
         st = GameObject.Find("Species Tracker").GetComponent<SpeciesTracker>();
+        hd = GetComponent<HintDetection>();
         audioSource = GetComponent<AudioSource>();
 
     }
@@ -144,122 +141,14 @@ public class GameManager : MonoBehaviour
         recheckingGrid = false;
     }
 
-    void IdleHint()
-    {
-        bool foundMatch = false;
-        for (int i = 0; i < gm.getWidth(); i++)
-        {
-            if (foundMatch == true)
-            {
-                break;
-            }
-            for (int j = 0; j < gm.getHeight(); j++)
-            {
-                if (CheckAdjacent(i, j))
-                {
-                    // make sure there are other animals of that
-                    // same type somewhere else in the matrix 
-                    if (otherMatches(i,j))
-                    {
-                        MakeMatchesGlow(i, j);
-                        foundMatch = true;
-                        break;
-
-                    }
-                }
-            }
-        }
-
-    }
-
-    bool otherMatches(int x, int y)
-    {
-        additionalMatches = new List<List<int>>();
-        GameObject currentTile = gm.tiles[x, y];
-        Tile currentTileScript = currentTile.GetComponent<Tile>();
-        currentGroup = currentTileScript.group;
-
-        for (int i = 0; i < gm.getWidth(); i++)
-        {
-            for (int j = 0; j < gm.getHeight(); j++)
-            {
-                GameObject compareTile = gm.tiles[i, j];
-                if (compareTile.tag != "player")
-                {
-                    Tile compareTileScript = compareTile.GetComponent<Tile>();
-                    int compareGroup = compareTileScript.group;
-
-                    List<int> currentMatch = new List<int>();
-                    if (compareGroup == currentGroup)
-                    {
-                        currentMatch.Add(i);
-                        currentMatch.Add(j);
-                        additionalMatches.Add(currentMatch);
-                    }
-
-                }
-            }
-        }
-
-        if (additionalMatches.Count >= 3)
-        {
-            return true;
-
-        }
-
-        return false;
-
-    }
 
 
-    void MakeMatchesGlow(int x, int y)
-    {
-        GameObject mainTile = gm.tiles[x, y];
-        Tile mainTileScript = mainTile.GetComponent<Tile>();
-        int hintColor = mainTileScript.group;
 
-        Vector2 pos;
-        // make tiles of the same animal group glow
-        for (int i=0; i < additionalMatches.Count; i++)
-        {
-            List<int> currentTile = additionalMatches[i];
-            int row = currentTile[0];
-            int col = currentTile[1];
-            pos = gm.tiles[row, col].transform.position;
 
-            // emit particles
-            HintParticles(pos, hintColor);
 
-        }
 
-    }
 
-    void HintParticles(Vector2 pos, int hintColor)
-    {
-        if (hintColor == 1)
-        {
-            (Instantiate(hintGreenParticles)).transform.position = pos;
-            
-        }
-        else if (hintColor == 2)
-        {
-            (Instantiate(hintPinkParticles)).transform.position = pos;
-        }
-        else if (hintColor == 3)
-        {
-            (Instantiate(hintRedParticles)).transform.position = pos;
 
-        }
-        else if (hintColor == 4)
-        {
-            (Instantiate(hintYellowParticles)).transform.position = pos;
-            
-        }
-        else if (hintColor == 5)
-        {
-            (Instantiate(hintOrangeParticles)).transform.position = pos;
-        }
-    }
 
     public void RemoveHintParticles()
     {
@@ -272,81 +161,7 @@ public class GameManager : MonoBehaviour
     }
 
 
-    bool CheckAdjacent(int x,int y)
-    {
-        matchPosX = new List<List<int>>();
-        matchPosY = new List<List<int>>();
 
-        // currrent tile info
-        GameObject currentTile = gm.tiles[x, y];
-        if (currentTile.tag == "player")
-        {
-            return false;
-        }
-
-        Tile currentTileScript = currentTile.GetComponent<Tile>();
-        currentGroup = currentTileScript.group;
-
-        // check left tiles
-        if ((x != (gm.getWidth() - 1)))
-        {
-            for (int i = x + 1; i < gm.getWidth(); i++)
-            {
-                string result = checkMatch(i, y, "x");
-                if (result == "break")
-                {
-                    break;
-                }
-            }
-        }
-
-
-        // check right tiles 
-        if ((x != 0))
-        {
-            for (int i = x - 1; i >= 0; i--)
-            {
-                string result = checkMatch(i, y, "x");
-                if (result == "break")
-                {
-                    break;
-                }
-            }
-        }
-
-        // check bottom tiles 
-        if ((y != (gm.getHeight() - 1)))
-        {
-            for (int i = y + 1; i < gm.getHeight(); i++)
-            {
-                string result = checkMatch(x, i, "y");
-                if (result == "break")
-                {
-                    break;
-                }
-            }
-        }
-
-        // check top tiles 
-        if ((y != 0))
-        {
-            for (int i = y - 1; i >= 0; i--)
-            {
-                string result = checkMatch(x, i, "y");
-                if (result == "break")
-                {
-                    break;
-                }
-            }
-        }
-
-        if (matchPosX.Count >= 1 || matchPosY.Count >= 1)
-        {
-            return true;
-        }
-        return false;
-
-    }
 
     // returns a boolean based on whether the tile has matches
     bool checkTile(int x, int y)
@@ -745,7 +560,8 @@ public class GameManager : MonoBehaviour
         {
             if (seconds >= waitTimeForHint)
             {
-                IdleHint();
+                // lets go to the hint detection script!
+                hd.IdleHint();
                 seconds = 0;
             }
             else
