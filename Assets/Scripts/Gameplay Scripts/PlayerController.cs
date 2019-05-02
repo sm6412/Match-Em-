@@ -27,7 +27,6 @@ public class PlayerController : MonoBehaviour
     public GameObject yellowGlow;
     public GameObject greenGlow;
 
-    // available tiles 
 
     bool isGreen = false;
     bool isYellow = false;
@@ -37,6 +36,9 @@ public class PlayerController : MonoBehaviour
 
     public AudioClip moveSound;
     private AudioSource audioSource;
+
+    bool hasMoved = false;
+
 
 
     // Start is called before the first frame update
@@ -63,36 +65,51 @@ public class PlayerController : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+
         checkPosition();
-        // move player and determine switches
-        if (canMove==true && (Input.GetKeyDown(KeyCode.DownArrow) || Input.GetKeyDown(KeyCode.S)) && ((matrixY+1)<gm.getHeight()))
+        
+        // get the mouse position
+        Vector3 mousePos = Input.mousePosition;
+        // set the z axis of the mouse
+        mousePos.z = 0;
+
+        // grab the mouse pos with regards to the screen
+        Vector3 screenPos = Camera.main.ScreenToWorldPoint(mousePos);
+
+        // use raycasting to see if the player clicks on a game object
+        RaycastHit2D hit = Physics2D.Raycast(screenPos, Vector2.zero);
+
+        if (hit && Input.GetMouseButtonDown(0))
         {
-            audioSource.PlayOneShot(moveSound);
-            switchDown();
-            SetAdjacentTiles();
+            // if the user clicks on the start 
+            // button, start the gameplay scene
+            if (hit.collider.tag == "tile" && hit.collider.transform.position==gm.gridHolder[matrixX, matrixY - 1].transform.position)
+            {
+                audioSource.PlayOneShot(moveSound);
+                switchUp();
+                SetAdjacentTiles();
+            }
+            else if (hit.collider.tag == "tile" && hit.collider.transform.position == gm.gridHolder[matrixX, matrixY + 1].transform.position)
+            {
+                audioSource.PlayOneShot(moveSound);
+                switchDown();
+                SetAdjacentTiles();
 
+            }
+            else if (hit.collider.tag == "tile" && hit.collider.transform.position == gm.gridHolder[matrixX + 1, matrixY].transform.position)
+            {
+                audioSource.PlayOneShot(moveSound);
+                switchRight();
+                SetAdjacentTiles();
 
-        }
-        else if (canMove==true && (Input.GetKeyDown(KeyCode.UpArrow) || Input.GetKeyDown(KeyCode.W)) && ((matrixY - 1) >= 0))
-        {
-            audioSource.PlayOneShot(moveSound);
-            switchUp();
-            SetAdjacentTiles();
+            }
+            else if (hit.collider.tag == "tile" && hit.collider.transform.position == gm.gridHolder[matrixX - 1, matrixY].transform.position)
+            {
+                audioSource.PlayOneShot(moveSound);
+                switchLeft();
+                SetAdjacentTiles();
 
-        }
-        else if (canMove == true && (Input.GetKeyDown(KeyCode.RightArrow) || Input.GetKeyDown(KeyCode.D)) && ((matrixX + 1) < gm.getWidth()))
-        {
-            audioSource.PlayOneShot(moveSound);
-            switchRight();
-            SetAdjacentTiles();
-
-        }
-        else if (canMove == true && (Input.GetKeyDown(KeyCode.LeftArrow) || Input.GetKeyDown(KeyCode.A)) && ((matrixX - 1) >= 0))
-        {
-            audioSource.PlayOneShot(moveSound);
-            switchLeft();
-            SetAdjacentTiles();
-
+            }
         }
     }
 
@@ -105,28 +122,69 @@ public class PlayerController : MonoBehaviour
 
     }
 
+    GameObject topTile;
+    GameObject bottomTile;
+    GameObject rightTile;
+    GameObject leftTile;
     void SetAdjacentTiles()
     {
-        // destroy particles for previous available tiles to move to
-        GameObject[] hintParticlesList = GameObject.FindGameObjectsWithTag("available");
-        foreach (GameObject hintParticle in hintParticlesList)
-        {
-            GameObject.Destroy(hintParticle);
-        }
+        // Stop all the coroutines
+        StopAllCoroutines();
 
-        Vector2 pos;
         // set top tile
-        pos = pos = gm.tiles[matrixX, matrixY+1].transform.position;
+        topTile = gm.tiles[matrixX, matrixY+1];
+        StartCoroutine(Breath(topTile));
 
         // set bottom tile
-        pos = gm.tiles[matrixX, matrixY - 1].transform.position;
+        bottomTile = gm.tiles[matrixX, matrixY - 1];
+        StartCoroutine(Breath(bottomTile));
 
         // set right tile
-        pos = gm.tiles[matrixX + 1, matrixY].transform.position;
+        rightTile = gm.tiles[matrixX + 1, matrixY];
+        StartCoroutine(Breath(rightTile));
 
         // set left tile 
-        pos = gm.tiles[matrixX - 1, matrixY].transform.position;
+        leftTile = gm.tiles[matrixX - 1, matrixY];
+        StartCoroutine(Breath(leftTile));
 
+    }
+
+    private float _currentScale = InitScale;
+    private const float TargetScale = 0.81f;
+    private const float InitScale = .70f;
+    private const int FramesCount = 100;
+    private const float AnimationTimeSeconds = 2;
+    private float _deltaTime = AnimationTimeSeconds / FramesCount;
+    private float _dx = (TargetScale - InitScale) / FramesCount;
+    private bool _upScale = true;
+    private IEnumerator Breath(GameObject Lungs)
+    {
+        while (true)
+        {
+            while (_upScale)
+            {
+                _currentScale += _dx;
+                if (_currentScale > TargetScale)
+                {
+                    _upScale = false;
+                    _currentScale = TargetScale;
+                }
+                Lungs.transform.localScale = Vector3.one * _currentScale;
+                yield return new WaitForSeconds(_deltaTime);
+            }
+
+            while (!_upScale)
+            {
+                _currentScale -= _dx;
+                if (_currentScale < InitScale)
+                {
+                    _upScale = true;
+                    _currentScale = InitScale;
+                }
+                Lungs.transform.localScale = Vector3.one * _currentScale;
+                yield return new WaitForSeconds(_deltaTime);
+            }
+        }
     }
 
     // switch player with a tile underneath

@@ -14,6 +14,7 @@ TagManager:
   - medium button
   - hard button
   - hint
+  - available
   layers:
   - Default
   - TransparentFX
@@ -63,12 +64,12 @@ TagManager:
   - name: base
     uniqueID: 2208762583
     locked: 0
-  - name: text
-    uniqueID: 3067727919
-    locked: 0
   - name: tiles
     uniqueID: 3275270241
     locked: 0
   - name: hint particles
     uniqueID: 3562876035
+    locked: 0
+  - name: text
+    uniqueID: 3067727919
     locked: 0
