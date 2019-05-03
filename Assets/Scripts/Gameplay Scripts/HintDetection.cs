@@ -10,7 +10,8 @@ public class HintDetection : MonoBehaviour
     public GameObject hintRedParticles;
     public GameObject hintYellowParticles;
     public GameObject hintOrangeParticles;
-    List<List<int>> additionalMatches;
+
+    List<List<int>> mainMatches;
     GridMaker gm;
     List<List<int>> matchPosX;
     List<List<int>> matchPosY;
@@ -34,15 +35,9 @@ public class HintDetection : MonoBehaviour
             {
                 if (CheckAdjacent(i, j))
                 {
-                    // make sure there are other animals of that
-                    // same type somewhere else in the matrix 
-                    if (otherMatches(i, j))
-                    {
-                        MakeMatchesGlow(i, j);
-                        foundMatch = true;
-                        break;
-
-                    }
+                    MakeMatchesGlow();
+                    foundMatch = true;
+                    break;
                 }
             }
         }
@@ -53,6 +48,7 @@ public class HintDetection : MonoBehaviour
     {
         matchPosX = new List<List<int>>();
         matchPosY = new List<List<int>>();
+        mainMatches = new List<List<int>>();
 
         // currrent tile info
         GameObject currentTile = gm.tiles[x, y];
@@ -117,10 +113,63 @@ public class HintDetection : MonoBehaviour
             }
         }
 
+        // found adjacent matches 
         if (matchPosX.Count >= 1 || matchPosY.Count >= 1)
         {
+            // add main animal to matches
+            List<int> mainAnimal = new List<int>();
+            int row = x;
+            int col = y;
+            mainAnimal.Add(row);
+            mainAnimal.Add(col);
+            mainMatches.Add(mainAnimal);
+
+            // add x axis matches
+            if (matchPosX.Count > 0)
+            {
+                
+                for (int i = 0; i < matchPosX.Count; i++)
+                {
+                    
+                    List<int> matchedTile = matchPosX[i];
+                    row = matchedTile[0];
+                    col = matchedTile[1];
+
+                    List<int> matchAnimal = new List<int>();
+                    matchAnimal.Add(row);
+                    matchAnimal.Add(col);
+                    mainMatches.Add(matchAnimal);
+
+                }
+               
+
+            }
+
+            // add y axis matches 
+            if (matchPosY.Count > 0)
+            {
+                
+                // make tiles of the same animal group glow
+                for (int i = 0; i < matchPosY.Count; i++)
+                {
+                    
+                    List<int> matchedTile = matchPosY[i];
+                    row = matchedTile[0];
+                    col = matchedTile[1];
+
+                    List<int> matchAnimal = new List<int>();
+                    matchAnimal.Add(row);
+                    matchAnimal.Add(col);
+                    mainMatches.Add(matchAnimal);
+
+                }
+                
+
+            }
+            // return true since match found
             return true;
         }
+
         return false;
 
     }
@@ -163,62 +212,21 @@ public class HintDetection : MonoBehaviour
         return "continue";
     }
 
-    bool otherMatches(int x, int y)
+
+    void MakeMatchesGlow()
     {
-        additionalMatches = new List<List<int>>();
-        GameObject currentTile = gm.tiles[x, y];
-        Tile currentTileScript = currentTile.GetComponent<Tile>();
-        currentGroup = currentTileScript.group;
-
-        for (int i = 0; i < gm.getWidth(); i++)
-        {
-            for (int j = 0; j < gm.getHeight(); j++)
-            {
-                GameObject compareTile = gm.tiles[i, j];
-                if (compareTile.tag != "player")
-                {
-                    Tile compareTileScript = compareTile.GetComponent<Tile>();
-                    int compareGroup = compareTileScript.group;
-
-                    List<int> currentMatch = new List<int>();
-                    if (compareGroup == currentGroup)
-                    {
-                        currentMatch.Add(i);
-                        currentMatch.Add(j);
-                        additionalMatches.Add(currentMatch);
-                    }
-
-                }
-            }
-        }
-
-        if (additionalMatches.Count >= 3)
-        {
-            return true;
-
-        }
-
-        return false;
-
-    }
-
-    void MakeMatchesGlow(int x, int y)
-    {
-        GameObject mainTile = gm.tiles[x, y];
-        Tile mainTileScript = mainTile.GetComponent<Tile>();
-        int hintColor = mainTileScript.group;
-
         Vector2 pos;
-        // make tiles of the same animal group glow
-        for (int i = 0; i < additionalMatches.Count; i++)
+        for (int x = 0; x < mainMatches.Count; x++)
         {
-            List<int> currentTile = additionalMatches[i];
-            int row = currentTile[0];
-            int col = currentTile[1];
+            List<int> matchedTile = mainMatches[x];
+            int row = matchedTile[0];
+            int col = matchedTile[1];
+            // handle current block
             pos = gm.tiles[row, col].transform.position;
 
             // emit particles
-            HintParticles(pos, hintColor);
+            HintParticles(pos, currentGroup);
+
 
         }
 
