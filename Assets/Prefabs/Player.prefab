@@ -112,7 +112,7 @@ MonoBehaviour:
     type: 3}
   redBorder: {fileID: 3611144839595348200, guid: 5da59a7b12c5e474495dda7db966976a,
     type: 3}
-  purpleBorder: {fileID: 1920104361232325587, guid: 8d693751e3e981e48ac5b1b9c94ff371,
+  orangeBorder: {fileID: 2448731660191877450, guid: 54b366a67ebd0f44bbdb830a97e19044,
     type: 3}
 --- !u!82 &6235987491843757878
 AudioSource:

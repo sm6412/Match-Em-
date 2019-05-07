@@ -84,6 +84,7 @@ public class PlayerController : MonoBehaviour
         // use raycasting to see if the player clicks on a game object
         RaycastHit2D hit = Physics2D.Raycast(screenPos, Vector2.zero);
 
+        GameObject[] gms = GameObject.FindGameObjectsWithTag("border");
         if (hit && Input.GetMouseButtonDown(0))
         {
             // if the user clicks on the start 
@@ -91,14 +92,23 @@ public class PlayerController : MonoBehaviour
             if ((matrixY-1>=0) && hit.collider.tag == "tile" && hit.collider.transform.position == gm.gridHolder[matrixX, matrixY - 1].transform.position)
             {
                 // make the tile look selected 
-
+                
+                if (gms.Length == 0)
+                {
+                    isSelected(matrixX, matrixY + 1);
+                }
+                
                 GameManager.Instance.RemoveHintParticles();
                 audioSource.PlayOneShot(moveSound);
                 switchUp();
             }
             else if ((matrixY+1 <= (gm.getHeight()-1)) && hit.collider.tag == "tile" && hit.collider.transform.position == gm.gridHolder[matrixX, matrixY + 1].transform.position)
             {
-                isSelected(matrixX, matrixY + 1);
+                if (gms.Length == 0)
+                {
+                    isSelected(matrixX, matrixY + 1);
+                }
+                
                 GameManager.Instance.RemoveHintParticles();
                 audioSource.PlayOneShot(moveSound);
                 switchDown();
@@ -106,7 +116,11 @@ public class PlayerController : MonoBehaviour
             }
             else if ((matrixX + 1 <= (gm.getWidth() - 1)) && hit.collider.tag == "tile" && hit.collider.transform.position == gm.gridHolder[matrixX + 1, matrixY].transform.position)
             {
-                isSelected(matrixX+1, matrixY);
+                if (gms.Length == 0)
+                {
+                    isSelected(matrixX + 1, matrixY);
+                }
+                
                 GameManager.Instance.RemoveHintParticles();
                 audioSource.PlayOneShot(moveSound);
                 switchRight();
@@ -114,7 +128,11 @@ public class PlayerController : MonoBehaviour
             }
             else if ((matrixX - 1 >= 0)  && hit.collider.tag == "tile" && hit.collider.transform.position == gm.gridHolder[matrixX - 1, matrixY].transform.position)
             {
-                isSelected(matrixX - 1, matrixY);
+                if (gms.Length == 0)
+                {
+                    isSelected(matrixX - 1, matrixY);
+                }
+                
                 GameManager.Instance.RemoveHintParticles();
                 audioSource.PlayOneShot(moveSound);
                 switchLeft();
@@ -126,21 +144,37 @@ public class PlayerController : MonoBehaviour
             if ((matrixY - 1 >= 0) && hit.collider.tag == "tile" && hit.collider.transform.position == gm.gridHolder[matrixX, matrixY - 1].transform.position)
             {
                 // make the tile look selected 
-                isSelected(matrixX, matrixY - 1);
+                if (gms.Length == 0)
+                {
+                    isSelected(matrixX, matrixY - 1);
+                }
+                
             }
             else if ((matrixY + 1 <= (gm.getHeight() - 1)) && hit.collider.tag == "tile" && hit.collider.transform.position == gm.gridHolder[matrixX, matrixY + 1].transform.position)
             {
-                isSelected(matrixX, matrixY + 1);
+                if (gms.Length == 0)
+                {
+                    isSelected(matrixX, matrixY + 1);
+                }
+                
 
             }
             else if ((matrixX + 1 <= (gm.getWidth() - 1)) && hit.collider.tag == "tile" && hit.collider.transform.position == gm.gridHolder[matrixX + 1, matrixY].transform.position)
             {
-                isSelected(matrixX + 1, matrixY);
+                if (gms.Length == 0)
+                {
+                    isSelected(matrixX + 1, matrixY);
+                }
+                
 
             }
             else if ((matrixX - 1 >= 0) && hit.collider.tag == "tile" && hit.collider.transform.position == gm.gridHolder[matrixX - 1, matrixY].transform.position)
             {
-                isSelected(matrixX - 1, matrixY);
+                if (gms.Length == 0)
+                {
+                    isSelected(matrixX - 1, matrixY);
+                }
+                
 
             }
 
@@ -164,29 +198,39 @@ public class PlayerController : MonoBehaviour
         if (currentGroup==1)
         {
             GameObject border = Instantiate(greenBorder);
+            Vector3 scale = new Vector3(gm.scaleAmount, gm.scaleAmount, 1f);
+            border.transform.localScale = scale;
             border.transform.position = pos;
         }
         else if (currentGroup==2)
         {
             GameObject border = Instantiate(pinkBorder);
+            Vector3 scale = new Vector3(gm.scaleAmount, gm.scaleAmount, 1f);
+            border.transform.localScale = scale;
             border.transform.position = pos;
 
         }
         else if (currentGroup == 3)
         {
             GameObject border = Instantiate(redBorder);
+            Vector3 scale = new Vector3(gm.scaleAmount, gm.scaleAmount, 1f);
+            border.transform.localScale = scale;
             border.transform.position = pos;
 
         }
         else if (currentGroup == 4)
         {
             GameObject border = Instantiate(yellowBorder);
+            Vector3 scale = new Vector3(gm.scaleAmount, gm.scaleAmount, 1f);
+            border.transform.localScale = scale;
             border.transform.position = pos;
 
         }
         else if (currentGroup == 5)
         {
             GameObject border = Instantiate(orangeBorder);
+            Vector3 scale = new Vector3(gm.scaleAmount, gm.scaleAmount, 1f);
+            border.transform.localScale = scale;
             border.transform.position = pos;
 
         }
