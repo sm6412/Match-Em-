@@ -93,6 +93,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0eaa53cfcfece6d408841eb7c0dc8d45, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  matrixX: 0
+  matrixY: 0
   canMove: 1
   redGlow: {fileID: 6413091554061554858, guid: 62faee69274b4eb4e8c5ee0a2e914f65, type: 3}
   orangeGlow: {fileID: 8179664753166924081, guid: c99d3d07e4bedbe41a6bba398d5cbff7,
@@ -101,9 +103,17 @@ MonoBehaviour:
     type: 3}
   greenGlow: {fileID: 7839467053582479336, guid: a13acdd85c3431048a48d3de517cd9ce,
     type: 3}
-  availableTile: {fileID: 49106941794855358, guid: 96b26ed7152f47649b94b502ad486c46,
-    type: 3}
   moveSound: {fileID: 8300000, guid: 7935551f773ec5042b38204dc16c6194, type: 3}
+  greenBorder: {fileID: 6678514502324512855, guid: 8f243061de6407f47b83493ebb28e117,
+    type: 3}
+  pinkBorder: {fileID: 410802148201052884, guid: b29ab09f7d3ff2a45825876b99a84024,
+    type: 3}
+  yellowBorder: {fileID: 7740344350744059146, guid: c34e9e5d09963804290ff4699e709bc7,
+    type: 3}
+  redBorder: {fileID: 3611144839595348200, guid: 5da59a7b12c5e474495dda7db966976a,
+    type: 3}
+  purpleBorder: {fileID: 1920104361232325587, guid: 8d693751e3e981e48ac5b1b9c94ff371,
+    type: 3}
 --- !u!82 &6235987491843757878
 AudioSource:
   m_ObjectHideFlags: 0

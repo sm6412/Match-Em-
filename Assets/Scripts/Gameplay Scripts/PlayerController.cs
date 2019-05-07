@@ -13,8 +13,8 @@ public class PlayerController : MonoBehaviour
     private ProgressController pc;
 
     // player matrix x and y position
-    int matrixX;
-    int matrixY;
+    public int matrixX;
+    public int matrixY;
 
 
     // bool to determine whether the player can move or not
@@ -36,6 +36,13 @@ public class PlayerController : MonoBehaviour
 
     public AudioClip moveSound;
     private AudioSource audioSource;
+
+    // get borders
+    public GameObject greenBorder;
+    public GameObject pinkBorder;
+    public GameObject yellowBorder;
+    public GameObject redBorder;
+    public GameObject orangeBorder;
 
 
 
@@ -83,12 +90,15 @@ public class PlayerController : MonoBehaviour
             // button, start the gameplay scene
             if ((matrixY-1>=0) && hit.collider.tag == "tile" && hit.collider.transform.position == gm.gridHolder[matrixX, matrixY - 1].transform.position)
             {
+                // make the tile look selected 
+
                 GameManager.Instance.RemoveHintParticles();
                 audioSource.PlayOneShot(moveSound);
                 switchUp();
             }
             else if ((matrixY+1 <= (gm.getHeight()-1)) && hit.collider.tag == "tile" && hit.collider.transform.position == gm.gridHolder[matrixX, matrixY + 1].transform.position)
             {
+                isSelected(matrixX, matrixY + 1);
                 GameManager.Instance.RemoveHintParticles();
                 audioSource.PlayOneShot(moveSound);
                 switchDown();
@@ -96,6 +106,7 @@ public class PlayerController : MonoBehaviour
             }
             else if ((matrixX + 1 <= (gm.getWidth() - 1)) && hit.collider.tag == "tile" && hit.collider.transform.position == gm.gridHolder[matrixX + 1, matrixY].transform.position)
             {
+                isSelected(matrixX+1, matrixY);
                 GameManager.Instance.RemoveHintParticles();
                 audioSource.PlayOneShot(moveSound);
                 switchRight();
@@ -103,12 +114,83 @@ public class PlayerController : MonoBehaviour
             }
             else if ((matrixX - 1 >= 0)  && hit.collider.tag == "tile" && hit.collider.transform.position == gm.gridHolder[matrixX - 1, matrixY].transform.position)
             {
+                isSelected(matrixX - 1, matrixY);
                 GameManager.Instance.RemoveHintParticles();
                 audioSource.PlayOneShot(moveSound);
                 switchLeft();
 
             }
         }
+        else if (hit)
+        {
+            if ((matrixY - 1 >= 0) && hit.collider.tag == "tile" && hit.collider.transform.position == gm.gridHolder[matrixX, matrixY - 1].transform.position)
+            {
+                // make the tile look selected 
+                isSelected(matrixX, matrixY - 1);
+            }
+            else if ((matrixY + 1 <= (gm.getHeight() - 1)) && hit.collider.tag == "tile" && hit.collider.transform.position == gm.gridHolder[matrixX, matrixY + 1].transform.position)
+            {
+                isSelected(matrixX, matrixY + 1);
+
+            }
+            else if ((matrixX + 1 <= (gm.getWidth() - 1)) && hit.collider.tag == "tile" && hit.collider.transform.position == gm.gridHolder[matrixX + 1, matrixY].transform.position)
+            {
+                isSelected(matrixX + 1, matrixY);
+
+            }
+            else if ((matrixX - 1 >= 0) && hit.collider.tag == "tile" && hit.collider.transform.position == gm.gridHolder[matrixX - 1, matrixY].transform.position)
+            {
+                isSelected(matrixX - 1, matrixY);
+
+            }
+
+        }
+        else
+        {
+            GameObject[] borderParticlesList = GameObject.FindGameObjectsWithTag("border");
+            foreach (GameObject borderParticle in borderParticlesList)
+            {
+                GameObject.Destroy(borderParticle);
+            }
+        }
+    }
+
+    void isSelected(int x, int y)
+    {
+        Vector2 pos = gm.gridHolder[x, y].transform.position;
+        GameObject currentTile = gm.tiles[x, y];
+        Tile currentTileScript = currentTile.GetComponent<Tile>();
+        int currentGroup = currentTileScript.group;
+        if (currentGroup==1)
+        {
+            GameObject border = Instantiate(greenBorder);
+            border.transform.position = pos;
+        }
+        else if (currentGroup==2)
+        {
+            GameObject border = Instantiate(pinkBorder);
+            border.transform.position = pos;
+
+        }
+        else if (currentGroup == 3)
+        {
+            GameObject border = Instantiate(redBorder);
+            border.transform.position = pos;
+
+        }
+        else if (currentGroup == 4)
+        {
+            GameObject border = Instantiate(yellowBorder);
+            border.transform.position = pos;
+
+        }
+        else if (currentGroup == 5)
+        {
+            GameObject border = Instantiate(orangeBorder);
+            border.transform.position = pos;
+
+        }
+
     }
 
     // update player position
@@ -194,6 +276,7 @@ public class PlayerController : MonoBehaviour
 
         // check for matches
         GameManager.Instance.switchMatchCheck(xToCheck,yToCheck);
+        Debug.Log("Player is located at " + matrixX + " " + matrixY);
 
     }
 
@@ -213,6 +296,7 @@ public class PlayerController : MonoBehaviour
         gm.tiles[matrixX, matrixY] = this.gameObject;
 
         GameManager.Instance.switchMatchCheck(xToCheck, yToCheck);
+        Debug.Log("Player is located at " + matrixX + " " + matrixY);
 
     }
 

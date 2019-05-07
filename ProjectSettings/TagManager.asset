@@ -15,6 +15,7 @@ TagManager:
   - hard button
   - hint
   - available
+  - border
   layers:
   - Default
   - TransparentFX

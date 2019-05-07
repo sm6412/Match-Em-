@@ -15,33 +15,105 @@ public class HintDetection : MonoBehaviour
     GridMaker gm;
     List<List<int>> matchPosX;
     List<List<int>> matchPosY;
+    List<int> additionalMatch;
     int currentGroup;
+    PlayerController player;
+
 
     private void Start()
     {
+        player = GameObject.Find("Player(Clone)").GetComponent<PlayerController>();
         gm = GameObject.Find("Grid Maker").GetComponent<GridMaker>();
     }
 
-    public void IdleHint()
+    public void IdleHint(int playerX, int playerY,int offset)
     {
-        bool foundMatch = false;
-        for (int i = 0; i < gm.getWidth(); i++)
+        if (offset > 5)
         {
-            if (foundMatch == true)
+            return;
+        }
+        
+
+        int currentX = playerX - offset;
+        int currentY = playerY - offset;
+        int endY = playerY + offset;
+
+        // handle left column
+        Debug.Log("Check left column");
+        for (int y = currentY; y <= endY; y++)
+        {
+            if ((currentX >= 0 && currentX < 5) && (y >= 0 && y < 5))
             {
-                break;
-            }
-            for (int j = 0; j < gm.getHeight(); j++)
-            {
-                if (CheckAdjacent(i, j))
+                if (CheckAdjacent(currentX, y))
                 {
-                    MakeMatchesGlow();
-                    foundMatch = true;
-                    break;
+                    if (MakeMatchesGlow())
+                    {
+                        return;
+                    }
                 }
+
             }
         }
 
+        Debug.Log("Check right column");
+        // handle right column
+        currentX = playerX + offset;
+        for (int y = currentY; y <= endY; y++)
+        {
+            if ((currentX >= 0 && currentX < 5) && (y >= 0 && y < 5))
+            {
+                if (CheckAdjacent(currentX, y))
+                {
+                    if (MakeMatchesGlow())
+                    {
+                        return;
+                    }
+                }
+
+            }
+        }
+
+        Debug.Log("Check top row");
+        // handle top row
+        currentX = playerX - offset;
+        currentY = playerY - offset;
+        int endX = playerX + offset;
+        for (int x = currentX; x <= endX; x++)
+        {
+            if ((x >= 0 && x < 5) && (currentY >= 0 && currentY < 5))
+            {
+                if (CheckAdjacent(x, currentY))
+                {
+                    if (MakeMatchesGlow())
+                    {
+                        return;
+                    }
+                }
+
+            }
+        }
+
+        Debug.Log("Bottom row");
+        currentY = playerY + offset;
+        for (int x = currentX; x <= endX; x++)
+        {
+            if ((x >= 0 && x < 5) && (currentY >= 0 && currentY < 5))
+            {
+                if (CheckAdjacent(x, currentY))
+                {
+                    if (MakeMatchesGlow())
+                    {
+                        return;
+                    }
+                    
+                }
+
+            }
+        }
+
+        // nothing found in current radius, run with greater offset
+        Debug.Log("Time for a new offset");
+        IdleHint(playerX, playerY, offset + 1);
     }
 
     bool CheckAdjacent(int x, int y)
@@ -212,23 +284,186 @@ public class HintDetection : MonoBehaviour
         return "continue";
     }
 
-
-    void MakeMatchesGlow()
+    bool additionalMatchCheck(int x, int y)
     {
-        Vector2 pos;
+        GameObject currentTile = gm.tiles[x, y];
+
+        if (currentTile.tag == "player")
+        {
+            return false;
+        }
+
+        Tile tileScript = currentTile.GetComponent<Tile>();
+        int group = tileScript.group;
+
+        if (currentGroup == group)
+        {
+            return true;
+        }
+        return false;
+    }
+
+    // checks for when a match occurs
+    bool checkAdditionalMatch(int playerX, int playerY)
+    {
+        // get current group
+        GameObject currentTile = gm.tiles[playerX, playerY];
+        Tile currentTileScript = currentTile.GetComponent<Tile>();
+        currentGroup = currentTileScript.group;
+
+        additionalMatch = new List<int>();
+
+        int offset = 1;
+        int currentX = playerX - offset;
+        int currentY = playerY - offset;
+        int endY = playerY + offset;
+
+        // handle left column
+        for (int y = currentY; y <= endY; y++)
+        {
+            if ((currentX >= 0 && currentX < gm.getWidth()) && (y >= 0 && y < gm.getHeight()))
+            {
+
+                if (additionalMatchCheck(currentX, y) && checkForNovelty(currentX,y))
+                {
+                    additionalMatch.Add(currentX);
+                    additionalMatch.Add(y);
+                    return true;
+                }
+
+            }
+        }
+
+        // handle right column
+        currentX = playerX + offset;
+        for (int y = currentY; y <= endY; y++)
+        {
+            if ((currentX >= 0 && currentX < gm.getWidth()) && (y >= 0 && y < gm.getHeight()))
+            {
+                if (additionalMatchCheck(currentX, y) && checkForNovelty(currentX,y))
+                {
+                    additionalMatch.Add(currentX);
+                    additionalMatch.Add(y);
+                    return true;
+                }
+
+            }
+        }
+
+
+        // handle top row
+        currentX = playerX - offset;
+        currentY = playerY - offset;
+        int endX = playerX + offset;
+        for (int x = currentX; x <= endX; x++)
+        {
+            if ((x >= 0 && x < gm.getWidth()) && (currentY >= 0 && currentY < gm.getHeight()))
+            {
+                if (additionalMatchCheck(x, currentY) && checkForNovelty(x,currentY))
+                {
+                    additionalMatch.Add(x);
+                    additionalMatch.Add(currentY);
+                    return true;
+                }
+
+            }
+        }
+
+
+        currentY = playerY + offset;
+        for (int x = currentX; x <= endX; x++)
+        {
+            if ((x >= 0 && x < gm.getWidth()) && (currentY >= 0 && currentY < gm.getHeight()))
+            {
+                if (additionalMatchCheck(x, currentY) && checkForNovelty(x,currentY))
+                {
+                    additionalMatch.Add(x);
+                    additionalMatch.Add(currentY);
+                    return true;
+
+                }
+
+            }
+        }
+        return false;
+
+    }
+
+    bool checkForNovelty(int compareX, int compareY)
+    {
         for (int x = 0; x < mainMatches.Count; x++)
         {
             List<int> matchedTile = mainMatches[x];
             int row = matchedTile[0];
             int col = matchedTile[1];
-            // handle current block
-            pos = gm.tiles[row, col].transform.position;
+            if (compareX==row && compareY == col)
+            {
+                return false;
+            }
+        }
+        return true;
+    }
 
-            // emit particles
-            HintParticles(pos, currentGroup);
+
+    bool MakeMatchesGlow()
+    {
+        Vector2 pos;
+        int counter = 0;
+        if (mainMatches.Count < 3)
+        {
+            Debug.Log("We need to find a third match!");
+            for (int x = 0; x < mainMatches.Count; x++)
+            {
+                List<int> matchedTile = mainMatches[x];
+                int row = matchedTile[0];
+                int col = matchedTile[1];
+                if (checkAdditionalMatch(row, col))
+                {
+                    Debug.Log("Found additional match");
+                    break;
+                }
+                else
+                {
+                    counter++;
+                }
+            }
+        }
+
+        if (counter == 2)
+        {
+            Debug.Log("Lets look at another tile!");
+            return false;
+        }
+        // lets add the additional match 
+        else if(counter < 2 && mainMatches.Count<3)
+        {
+            Debug.Log(mainMatches.Count);
+            mainMatches.Add(additionalMatch);
+        }
+
+        for (int x = 0; x < mainMatches.Count; x++)
+        {
+            List<int> matchedTile = mainMatches[x];
+            int row = matchedTile[0];
+            int col = matchedTile[1];
+            GameObject currentTile = gm.tiles[row, col];
+            Tile currentTileScript = currentTile.GetComponent<Tile>();
+            int singleGroup = currentTileScript.group;
+            if (currentGroup == singleGroup)
+            {
+                Debug.Log(row + " " + col + " glows");
+                // handle current block
+                pos = gm.tiles[row, col].transform.position;
+
+                // emit particles
+                HintParticles(pos, currentGroup);
+
+            }
+
 
 
         }
+        return true;
 
     }
 

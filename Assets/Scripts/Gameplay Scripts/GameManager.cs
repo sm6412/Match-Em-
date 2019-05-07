@@ -560,8 +560,9 @@ public class GameManager : MonoBehaviour
         {
             if (seconds >= waitTimeForHint)
             {
+                PlayerController player = GameObject.Find("Player(Clone)").GetComponent<PlayerController>();
                 // lets go to the hint detection script!
-                hd.IdleHint();
+                hd.IdleHint(player.matrixX,player.matrixY,1);
                 seconds = 0;
             }
             else
