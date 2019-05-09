@@ -28,7 +28,7 @@ Transform:
   m_GameObject: {fileID: 5278717085814637124}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: -0.24687327, y: -0.19, z: -0.03884777}
-  m_LocalScale: {x: 1.647766, y: 1.647766, z: 1}
+  m_LocalScale: {x: 0.3789532, y: 0.3789532, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
   m_RootOrder: 0
@@ -67,11 +67,11 @@ SpriteRenderer:
   m_AutoUVMaxDistance: 0.5
   m_AutoUVMaxAngle: 89
   m_LightmapParameters: {fileID: 0}
-  m_SortingLayerID: 0
-  m_SortingLayer: 0
+  m_SortingLayerID: -1227239377
+  m_SortingLayer: 4
   m_SortingOrder: 0
-  m_Sprite: {fileID: 21300000, guid: 2e97679d3e2aef64bb04ccab584b7685, type: 3}
-  m_Color: {r: 0.33333334, g: 1, b: 0, a: 1}
+  m_Sprite: {fileID: 21300000, guid: 4bdb42a64ad55fc41b6e0d3449098368, type: 3}
+  m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0
   m_DrawMode: 0
@@ -114,6 +114,12 @@ MonoBehaviour:
     type: 3}
   orangeBorder: {fileID: 2448731660191877450, guid: 54b366a67ebd0f44bbdb830a97e19044,
     type: 3}
+  hardBorder: {fileID: 7445928230740451760, guid: 645751ba328530647b07fe8d48226332,
+    type: 3}
+  redHat: {fileID: 21300000, guid: 4bdb42a64ad55fc41b6e0d3449098368, type: 3}
+  greenHat: {fileID: 21300000, guid: 82695e0af5ef1fd4cb9e901b3b3e6b56, type: 3}
+  yellowHat: {fileID: 21300000, guid: b27672a8f8faa6845ab3aa257b4de16a, type: 3}
+  orangeHat: {fileID: 21300000, guid: bb05273fa860c27428e11fa4156dac09, type: 3}
 --- !u!82 &6235987491843757878
 AudioSource:
   m_ObjectHideFlags: 0

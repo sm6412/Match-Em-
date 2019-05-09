@@ -12,6 +12,8 @@ public class PlayerController : MonoBehaviour
     // ref to the progress controller 
     private ProgressController pc;
 
+    private DisplayCurrentAnimal currentAnimal;
+
     // player matrix x and y position
     public int matrixX;
     public int matrixY;
@@ -43,6 +45,12 @@ public class PlayerController : MonoBehaviour
     public GameObject yellowBorder;
     public GameObject redBorder;
     public GameObject orangeBorder;
+    public GameObject hardBorder;
+
+    public Sprite redHat;
+    public Sprite greenHat;
+    public Sprite yellowHat;
+    public Sprite orangeHat;
 
 
 
@@ -53,6 +61,7 @@ public class PlayerController : MonoBehaviour
         // ref to grid maker 
         gm = GameObject.Find("Grid Maker").GetComponent<GridMaker>();
         pc = GameObject.Find("Progress Arrow").GetComponent<ProgressController>();
+        currentAnimal = GameObject.Find("Game Manager").GetComponent<DisplayCurrentAnimal>();
         audioSource = GetComponent<AudioSource>();
 
         // initialize player position
@@ -95,7 +104,15 @@ public class PlayerController : MonoBehaviour
                 
                 if (gms.Length == 0)
                 {
-                    isSelected(matrixX, matrixY + 1);
+                    if (GameManager.Instance.hard == true)
+                    {
+                        isSelectedHard(matrixX, matrixY + 1);
+                    }
+                    else
+                    {
+                        isSelectedEasy(matrixX, matrixY + 1);
+                    }
+                    
                 }
                 
                 GameManager.Instance.RemoveHintParticles();
@@ -106,7 +123,15 @@ public class PlayerController : MonoBehaviour
             {
                 if (gms.Length == 0)
                 {
-                    isSelected(matrixX, matrixY + 1);
+                    if (GameManager.Instance.hard == true)
+                    {
+                        isSelectedHard(matrixX, matrixY + 1);
+                    }
+                    else
+                    {
+                        isSelectedEasy(matrixX, matrixY + 1);
+                    }
+                    
                 }
                 
                 GameManager.Instance.RemoveHintParticles();
@@ -118,7 +143,15 @@ public class PlayerController : MonoBehaviour
             {
                 if (gms.Length == 0)
                 {
-                    isSelected(matrixX + 1, matrixY);
+                    if (GameManager.Instance.hard == true)
+                    {
+                        isSelectedHard(matrixX + 1, matrixY);
+                    }
+                    else
+                    {
+                        isSelectedEasy(matrixX + 1, matrixY);
+                    }
+                    
                 }
                 
                 GameManager.Instance.RemoveHintParticles();
@@ -130,7 +163,15 @@ public class PlayerController : MonoBehaviour
             {
                 if (gms.Length == 0)
                 {
-                    isSelected(matrixX - 1, matrixY);
+                    if (GameManager.Instance.hard == true)
+                    {
+                        isSelectedHard(matrixX - 1, matrixY);
+                    }
+                    else
+                    {
+                        isSelectedEasy(matrixX - 1, matrixY);
+                    }
+                    
                 }
                 
                 GameManager.Instance.RemoveHintParticles();
@@ -146,7 +187,17 @@ public class PlayerController : MonoBehaviour
                 // make the tile look selected 
                 if (gms.Length == 0)
                 {
-                    isSelected(matrixX, matrixY - 1);
+                    if (GameManager.Instance.hard == true)
+                    {
+                        isSelectedHard(matrixX, matrixY - 1);
+
+                    }
+                    else
+                    {
+                        isSelectedEasy(matrixX, matrixY - 1);
+
+                    }
+                    
                 }
                 
             }
@@ -154,7 +205,17 @@ public class PlayerController : MonoBehaviour
             {
                 if (gms.Length == 0)
                 {
-                    isSelected(matrixX, matrixY + 1);
+                    if (GameManager.Instance.hard == true)
+                    {
+                        isSelectedHard(matrixX, matrixY + 1);
+
+                    }
+                    else
+                    {
+                        isSelectedEasy(matrixX, matrixY + 1);
+
+                    }
+                    
                 }
                 
 
@@ -163,7 +224,15 @@ public class PlayerController : MonoBehaviour
             {
                 if (gms.Length == 0)
                 {
-                    isSelected(matrixX + 1, matrixY);
+                    if (GameManager.Instance.hard == true)
+                    {
+                        isSelectedHard(matrixX + 1, matrixY);
+                    }
+                    else
+                    {
+                        isSelectedEasy(matrixX + 1, matrixY);
+                    }
+                    
                 }
                 
 
@@ -172,7 +241,15 @@ public class PlayerController : MonoBehaviour
             {
                 if (gms.Length == 0)
                 {
-                    isSelected(matrixX - 1, matrixY);
+                    if (GameManager.Instance.hard == true)
+                    {
+                        isSelectedHard(matrixX - 1, matrixY);
+                    }
+                    else
+                    {
+                        isSelectedEasy(matrixX - 1, matrixY);
+                    }
+                    
                 }
                 
 
@@ -189,12 +266,30 @@ public class PlayerController : MonoBehaviour
         }
     }
 
-    void isSelected(int x, int y)
+    void isSelectedHard(int x, int y)
     {
         Vector2 pos = gm.gridHolder[x, y].transform.position;
         GameObject currentTile = gm.tiles[x, y];
         Tile currentTileScript = currentTile.GetComponent<Tile>();
         int currentGroup = currentTileScript.group;
+        int currentSpecies = currentTileScript.type;
+        currentAnimal.DisplaySpecies(currentSpecies, currentTile.GetComponent<SpriteRenderer>().sprite);
+        GameObject border = Instantiate(hardBorder);
+        Vector3 scale = new Vector3(gm.scaleAmount, gm.scaleAmount, 1f);
+        border.transform.localScale = scale;
+        border.transform.position = pos;
+
+    }
+
+    void isSelectedEasy(int x, int y)
+    {
+        Vector2 pos = gm.gridHolder[x, y].transform.position;
+        GameObject currentTile = gm.tiles[x, y];
+        Tile currentTileScript = currentTile.GetComponent<Tile>();
+        int currentGroup = currentTileScript.group;
+        int currentSpecies = currentTileScript.type;
+        currentAnimal.DisplaySpecies(currentSpecies,currentTile.GetComponent<SpriteRenderer>().sprite);
+
         if (currentGroup==1)
         {
             GameObject border = Instantiate(greenBorder);
@@ -202,7 +297,7 @@ public class PlayerController : MonoBehaviour
             border.transform.localScale = scale;
             border.transform.position = pos;
         }
-        else if (currentGroup==2)
+        else if (currentGroup == 2)
         {
             GameObject border = Instantiate(pinkBorder);
             Vector3 scale = new Vector3(gm.scaleAmount, gm.scaleAmount, 1f);
@@ -320,7 +415,6 @@ public class PlayerController : MonoBehaviour
 
         // check for matches
         GameManager.Instance.switchMatchCheck(xToCheck,yToCheck);
-        Debug.Log("Player is located at " + matrixX + " " + matrixY);
 
     }
 
@@ -340,7 +434,6 @@ public class PlayerController : MonoBehaviour
         gm.tiles[matrixX, matrixY] = this.gameObject;
 
         GameManager.Instance.switchMatchCheck(xToCheck, yToCheck);
-        Debug.Log("Player is located at " + matrixX + " " + matrixY);
 
     }
 
@@ -374,21 +467,15 @@ public class PlayerController : MonoBehaviour
     // change player color according to current grade
     void checkPosition()
     {
-        string greenString = "#56FF00";
-        string yellowString = "#FFFF01";
-        string orangeString = "#FFAA01";
-        string redString = "#FE0003";
 
         // B range
         // make red
         double pos = pc.transform.position.y;
-        if (pos >= -2.2 && pos < -1.19)
+        if (pos >= -2.27 && pos < -1.34)
         {
             if (isRed == false)
             {
-                Color newColor;
-                ColorUtility.TryParseHtmlString(redString, out newColor);
-                this.GetComponent<SpriteRenderer>().color = newColor;
+                this.GetComponent<SpriteRenderer>().sprite = redHat;
                 isRed = true;
                 // add particles 
                 currentParticles = Instantiate(redGlow);
@@ -396,13 +483,11 @@ public class PlayerController : MonoBehaviour
         }
         // B+ range
         // make orange
-        else if (pos >= -1.19 && pos < 0.4)
+        else if (pos >= -1.34 && pos < 0.2)
         {
             if (isOrange == false)
             {
-                Color newColor;
-                ColorUtility.TryParseHtmlString(orangeString, out newColor);
-                this.GetComponent<SpriteRenderer>().color = newColor;
+                this.GetComponent<SpriteRenderer>().sprite = orangeHat;
                 isOrange = true;
 
                 // set particles 
@@ -414,13 +499,11 @@ public class PlayerController : MonoBehaviour
         }
         // A range
         // make yellow
-        else if (pos >= 0.4 && pos < 1.97)
+        else if (pos >= 0.2 && pos < 1.77)
         {
             if (isYellow == false)
             {
-                Color newColor;
-                ColorUtility.TryParseHtmlString(yellowString, out newColor);
-                this.GetComponent<SpriteRenderer>().color = newColor;
+                this.GetComponent<SpriteRenderer>().sprite = yellowHat;
                 isYellow = true;
                 // add particles
                 Destroy(currentParticles);
@@ -428,14 +511,12 @@ public class PlayerController : MonoBehaviour
             }
         }
         // A+ range
-        else if (pos >= 1.97 && pos < 3.11)
+        else if (pos >= 1.77 && pos < 3.04)
         {
             if (isGreen == false)
             {
-                Color newColor;
-                ColorUtility.TryParseHtmlString(greenString, out newColor);
-                this.GetComponent<SpriteRenderer>().color = newColor;
-                isRed = true;
+                this.GetComponent<SpriteRenderer>().sprite = greenHat;
+                isGreen = true;
                 // add particles
                 Destroy(currentParticles);
                 currentParticles = Instantiate(redGlow);
@@ -444,4 +525,6 @@ public class PlayerController : MonoBehaviour
 
         }
     }
+
+   
 }

@@ -21,7 +21,7 @@ public class ProgressController : MonoBehaviour
         int addAmt = newScore;
         while(addAmt > 0)
         {
-            if ((this.transform.position.y + moveAmt) >= 3.11)
+            if ((this.transform.position.y + moveAmt) >= 3.04)
             {
                 reachedEnd = true;
                 yield break;

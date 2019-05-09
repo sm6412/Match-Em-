@@ -16,6 +16,8 @@ TagManager:
   - hint
   - available
   - border
+  - replay button
+  - back button
   layers:
   - Default
   - TransparentFX
