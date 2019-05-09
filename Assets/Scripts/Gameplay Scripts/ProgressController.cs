@@ -38,18 +38,7 @@ public class ProgressController : MonoBehaviour
     {
         if (reachedEnd)
         {
-            if (GameManager.Instance.easy == true)
-            {
-                SceneManager.LoadScene("Easy End");
-            }
-            else if (GameManager.Instance.medium == true)
-            {
-                SceneManager.LoadScene("Medium End");
-            }
-            else if (GameManager.Instance.hard == true)
-            {
-                SceneManager.LoadScene("Hard End");
-            }
+            SceneManager.LoadScene("End");
 
         }
     }

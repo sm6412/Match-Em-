@@ -36,6 +36,6 @@ EditorBuildSettings:
     path: Assets/Scenes/Levels/Hard Level.unity
     guid: 8abba1a7f806a014fb132707ba86b2df
   - enabled: 1
-    path: Assets/Scenes/End Scenes/Easy End.unity
+    path: Assets/Scenes/End Scenes/End.unity
     guid: f93a77fc32cec12429a790dfe0798318
   m_configObjects: {}

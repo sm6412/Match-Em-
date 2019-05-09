@@ -56,9 +56,6 @@ public class End : MonoBehaviour
     // most matched species fun fact text
     public Text funfactText;
 
-    public bool easy;
-    public bool medium;
-    public bool hard;
 
     float originalScale;
     // ref to audio source
@@ -135,19 +132,7 @@ public class End : MonoBehaviour
 
     void grabLevel()
     {
-        // restart the game when the spacebar is pressed
-        if (easy == true)
-        {
-            SceneManager.LoadScene("Easy Level");
-        }
-        else if (medium == true)
-        {
-            SceneManager.LoadScene("Medium Level");
-        }
-        else if (hard == true)
-        {
-            SceneManager.LoadScene("Hard Level");
-        }
+        SceneManager.LoadScene("Difficulty Selection");
 
     }
 
