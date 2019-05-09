@@ -3,21 +3,25 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
-public class StartScreen : MonoBehaviour
+public class Instructions : MonoBehaviour
 {
 
     float originalScale;
     // ref to audio source
     private AudioSource audioSource;
     bool overOption = false;
-    public GameObject play;
-    public GameObject instruc;
+
+    public bool instruc1;
+    public bool instruc2;
+    public bool instruc3;
+    public bool instruc4;
+
 
     // sound effects for when the players makes a match
     public AudioClip mouseOver;
     private void Start()
     {
-        originalScale = 45;
+        originalScale = this.transform.localScale.x;
         audioSource = GetComponent<AudioSource>();
     }
 
@@ -40,22 +44,32 @@ public class StartScreen : MonoBehaviour
         {
             // if the user clicks on the start 
             // button, start the gameplay scene
-            if (hit.collider.tag == "start button")
+            if (hit.collider.tag == "next button")
             {
                 // switch scene to gameplay
-                SceneManager.LoadScene("Difficulty Selection");
-            }
-            if (hit.collider.tag == "instructions button")
-            {
-                // switch scene to gameplay
-                SceneManager.LoadScene("Instructions 1");
+                if (instruc1 == true)
+                {
+                    SceneManager.LoadScene("Instructions 2");
+                }
+                else if (instruc2 == true)
+                {
+                    SceneManager.LoadScene("Instructions 3");
+                }
+                else if (instruc3 == true)
+                {
+                    SceneManager.LoadScene("Instructions 4");
+                }
+                else if (instruc4 == true)
+                {
+                    SceneManager.LoadScene("Start");
+                }
             }
         }
         else if (hit)
         {
             // if the mouse hovers over the button
             // make it turn green
-            if (hit.collider.tag == "start button")
+            if (hit.collider.tag == "next button")
             {
                 if (overOption == false)
                 {
@@ -64,29 +78,18 @@ public class StartScreen : MonoBehaviour
                 }
                 float scaleAmount = 52.335f;
                 Vector3 scale = new Vector3(scaleAmount, scaleAmount, 1f);
-                play.transform.localScale = scale;
-            }
-            if (hit.collider.tag == "instructions button")
-            {
-                if (overOption == false)
-                {
-                    audioSource.PlayOneShot(mouseOver);
-                    overOption = true;
-                }
-                float scaleAmount = 52.335f;
-                Vector3 scale = new Vector3(scaleAmount, scaleAmount, 1f);
-                instruc.transform.localScale = scale;
+                this.transform.localScale = scale;
             }
         }
         else
         {
             float scaleAmount = originalScale;
             Vector3 scale = new Vector3(scaleAmount, scaleAmount, 1f);
-            instruc.transform.localScale = scale;
-            play.transform.localScale = scale;
+            this.transform.localScale = scale;
             overOption = false;
 
         }
 
     }
 }
+

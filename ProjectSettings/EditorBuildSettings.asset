@@ -12,6 +12,18 @@ EditorBuildSettings:
     path: Assets/Scenes/Start Scenes/Start.unity
     guid: a5a39f484ed4c5a4e9d09853085690a7
   - enabled: 1
+    path: Assets/Scenes/Instructions/Instructions 1.unity
+    guid: 20d3cac17ff8cbd44aaa015b9d97eafd
+  - enabled: 1
+    path: Assets/Scenes/Instructions/Instructions 2.unity
+    guid: fc4ec2f9b1c708945b720f818a1d7079
+  - enabled: 1
+    path: Assets/Scenes/Instructions/Instructions 3.unity
+    guid: 3f8a0daa5709a2d45b0f319b32957977
+  - enabled: 1
+    path: Assets/Scenes/Instructions/Instructions 4.unity
+    guid: 949119290565b1a458586eca73315a1b
+  - enabled: 1
     path: Assets/Scenes/Start Scenes/Difficulty Selection.unity
     guid: c1a053d4274cd114da6c95fc1b78f2bb
   - enabled: 1

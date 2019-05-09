@@ -18,6 +18,8 @@ TagManager:
   - border
   - replay button
   - back button
+  - next button
+  - instructions button
   layers:
   - Default
   - TransparentFX
