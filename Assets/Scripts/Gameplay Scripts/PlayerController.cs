@@ -519,7 +519,7 @@ public class PlayerController : MonoBehaviour
                 isGreen = true;
                 // add particles
                 Destroy(currentParticles);
-                currentParticles = Instantiate(redGlow);
+                currentParticles = Instantiate(greenGlow);
 
             }
 

@@ -225,7 +225,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 1.96, y: 0.13673401}
+  m_AnchoredPosition: {x: 1.96, y: 0.29}
   m_SizeDelta: {x: 377.907, y: 30}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &307812320
@@ -679,8 +679,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 1.361, y: -0.88}
-  m_SizeDelta: {x: 313.673, y: 48.959}
+  m_AnchoredPosition: {x: 1.361, y: -0.775}
+  m_SizeDelta: {x: 313.673, y: 62.95}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1320784769
 MonoBehaviour:
@@ -704,7 +704,7 @@ MonoBehaviour:
       Version=1.0.0.0, Culture=neutral, PublicKeyToken=null
   m_FontData:
     m_Font: {fileID: 12800000, guid: b828a83e3f33c4348aaf5f9a802cbc42, type: 3}
-    m_FontSize: 34
+    m_FontSize: 30
     m_FontStyle: 0
     m_BestFit: 0
     m_MinSize: 0
@@ -715,7 +715,7 @@ MonoBehaviour:
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
     m_LineSpacing: 1
-  m_Text: 'name
+  m_Text: 'Eastern Red Spotted Salamander
 
 '
 --- !u!222 &1320784770
@@ -949,9 +949,6 @@ MonoBehaviour:
   speciesSR: {fileID: 1914378175}
   speciesNameText: {fileID: 1320784769}
   funfactText: {fileID: 1783156366}
-  easy: 1
-  medium: 0
-  hard: 0
   mouseOver: {fileID: 8300000, guid: 4b77c72077aab1c4aade1f17544b45aa, type: 3}
   replayButton: {fileID: 407609797}
 --- !u!114 &1807660156
