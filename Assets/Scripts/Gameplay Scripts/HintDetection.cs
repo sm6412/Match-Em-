@@ -11,12 +11,23 @@ public class HintDetection : MonoBehaviour
     public GameObject hintYellowParticles;
     public GameObject hintOrangeParticles;
 
+    // list of original matches 
     List<List<int>> mainMatches;
+
+    // ref to gridmaker 
     GridMaker gm;
+
+    // matches in x and y axis 
     List<List<int>> matchPosX;
     List<List<int>> matchPosY;
+
+    // additional match 
     List<int> additionalMatch;
+
+    // current animal group 
     int currentGroup;
+
+    // ref to player script 
     PlayerController player;
 
 
@@ -26,6 +37,7 @@ public class HintDetection : MonoBehaviour
         gm = GameObject.Find("Grid Maker").GetComponent<GridMaker>();
     }
 
+    // begin looking for two adjacent tiles around player 
     public void IdleHint(int playerX, int playerY,int offset)
     {
         if (offset > 5)
@@ -39,7 +51,6 @@ public class HintDetection : MonoBehaviour
         int endY = playerY + offset;
 
         // handle left column
-        Debug.Log("Check left column");
         for (int y = currentY; y <= endY; y++)
         {
             if ((currentX >= 0 && currentX < 5) && (y >= 0 && y < 5))
@@ -55,7 +66,6 @@ public class HintDetection : MonoBehaviour
             }
         }
 
-        Debug.Log("Check right column");
         // handle right column
         currentX = playerX + offset;
         for (int y = currentY; y <= endY; y++)
@@ -73,7 +83,6 @@ public class HintDetection : MonoBehaviour
             }
         }
 
-        Debug.Log("Check top row");
         // handle top row
         currentX = playerX - offset;
         currentY = playerY - offset;
@@ -93,7 +102,6 @@ public class HintDetection : MonoBehaviour
             }
         }
 
-        Debug.Log("Bottom row");
         currentY = playerY + offset;
         for (int x = currentX; x <= endX; x++)
         {
@@ -112,10 +120,10 @@ public class HintDetection : MonoBehaviour
         }
 
         // nothing found in current radius, run with greater offset
-        Debug.Log("Time for a new offset");
         IdleHint(playerX, playerY, offset + 1);
     }
 
+    // check for whether the nearby tile is of the same animal group 
     bool CheckAdjacent(int x, int y)
     {
         matchPosX = new List<List<int>>();
@@ -284,6 +292,7 @@ public class HintDetection : MonoBehaviour
         return "continue";
     }
 
+    // makes sure additional match is of the same group   
     bool additionalMatchCheck(int x, int y)
     {
         GameObject currentTile = gm.tiles[x, y];
@@ -303,7 +312,7 @@ public class HintDetection : MonoBehaviour
         return false;
     }
 
-    // checks for when a match occurs
+    // looks for a new match 
     bool checkAdditionalMatch(int playerX, int playerY)
     {
         // get current group
@@ -389,6 +398,7 @@ public class HintDetection : MonoBehaviour
 
     }
 
+    // make sure the new match is not already found 
     bool checkForNovelty(int compareX, int compareY)
     {
         for (int x = 0; x < mainMatches.Count; x++)
@@ -404,14 +414,13 @@ public class HintDetection : MonoBehaviour
         return true;
     }
 
-
+    // makes the match glow 
     bool MakeMatchesGlow()
     {
         Vector2 pos;
         int counter = 0;
         if (mainMatches.Count < 3)
         {
-            Debug.Log("We need to find a third match!");
             for (int x = 0; x < mainMatches.Count; x++)
             {
                 List<int> matchedTile = mainMatches[x];
@@ -419,7 +428,6 @@ public class HintDetection : MonoBehaviour
                 int col = matchedTile[1];
                 if (checkAdditionalMatch(row, col))
                 {
-                    Debug.Log("Found additional match");
                     break;
                 }
                 else
@@ -431,13 +439,11 @@ public class HintDetection : MonoBehaviour
 
         if (counter == 2)
         {
-            Debug.Log("Lets look at another tile!");
             return false;
         }
         // lets add the additional match 
         else if(counter < 2 && mainMatches.Count<3)
         {
-            Debug.Log(mainMatches.Count);
             mainMatches.Add(additionalMatch);
         }
 
@@ -451,7 +457,6 @@ public class HintDetection : MonoBehaviour
             int singleGroup = currentTileScript.group;
             if (currentGroup == singleGroup)
             {
-                Debug.Log(row + " " + col + " glows");
                 // handle current block
                 pos = gm.tiles[row, col].transform.position;
 
@@ -467,6 +472,7 @@ public class HintDetection : MonoBehaviour
 
     }
 
+    // display hint particles 
     void HintParticles(Vector2 pos, int hintColor)
     {
         if (hintColor == 1)

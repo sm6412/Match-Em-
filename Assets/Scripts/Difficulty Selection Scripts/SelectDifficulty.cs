@@ -5,11 +5,15 @@ using UnityEngine.SceneManagement;
 
 public class SelectDifficulty : MonoBehaviour
 {
+    // original button scale 
     float originalScale;
+
+    // different difficulty buttons 
     public GameObject easyButton;
     public GameObject mediumButton;
     public GameObject hardButton;
 
+    // ref to audio source 
     private AudioSource audioSource;
 
     // sound effects for when the players makes a match
@@ -43,24 +47,26 @@ public class SelectDifficulty : MonoBehaviour
 
         if (hit && Input.GetMouseButtonDown(0))
         {
-            // if the user clicks on the start 
-            // button, start the gameplay scene
+               // easy button clicked 
             if (hit.collider.tag == "easy button")
             {
                 // switch scene to gameplay
                 SceneManager.LoadScene("Easy Level");
             }
+            // medium button clicked 
             else if (hit.collider.tag == "medium button")
             {
                 // switch scene to gameplay
                 SceneManager.LoadScene("Medium Level");
             }
+            // hard level clicked 
             else if (hit.collider.tag == "hard button")
             {
                 // switch scene to gameplay
                 SceneManager.LoadScene("Hard Level");
             }
         }
+        // detect if moused over buttons 
         else if (hit)
         {
             if (hit.collider.tag == "easy button")
@@ -100,6 +106,7 @@ public class SelectDifficulty : MonoBehaviour
         }
         else
         {
+            // reset scale when nothing is being moused over 
             float scaleAmount = originalScale;
             Vector3 scale = new Vector3(scaleAmount, scaleAmount, 1f);
             easyButton.transform.localScale = scale;

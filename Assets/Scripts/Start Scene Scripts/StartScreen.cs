@@ -7,9 +7,12 @@ public class StartScreen : MonoBehaviour
 {
 
     float originalScale;
+   
     // ref to audio source
     private AudioSource audioSource;
     bool overOption = false;
+
+    // play and instructions buttons 
     public GameObject play;
     public GameObject instruc;
 
@@ -38,23 +41,20 @@ public class StartScreen : MonoBehaviour
 
         if (hit && Input.GetMouseButtonDown(0))
         {
-            // if the user clicks on the start 
-            // button, start the gameplay scene
             if (hit.collider.tag == "start button")
             {
-                // switch scene to gameplay
+                // switch to difficulty selection scene
                 SceneManager.LoadScene("Difficulty Selection");
             }
             if (hit.collider.tag == "instructions button")
             {
-                // switch scene to gameplay
+                // switch scene to instructions scene 
                 SceneManager.LoadScene("Instructions 1");
             }
         }
         else if (hit)
         {
-            // if the mouse hovers over the button
-            // make it turn green
+            // see whether moused over 
             if (hit.collider.tag == "start button")
             {
                 if (overOption == false)

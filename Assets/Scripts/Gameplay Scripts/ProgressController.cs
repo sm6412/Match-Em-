@@ -5,17 +5,16 @@ using UnityEngine.SceneManagement;
 
 public class ProgressController : MonoBehaviour
 {
-    // initial score
 
     // the amount the progress controller
-    // moves
+    // moves when points earned 
     public float moveAmt;
-    // current y position of progress arrow
+    
+    // determines whether the end of the game is reached
+    // when the leaf gets to the top of the progress tracker 
     bool reachedEnd = false;
 
-
-
-
+    // moves leaf up 
     public IEnumerator AdjustProgress(int newScore)
     {
         int addAmt = newScore;
@@ -34,8 +33,11 @@ public class ProgressController : MonoBehaviour
 
     }
 
+
     private void Update()
     {
+        // switches to end scene when the progress 
+        // leaf reached the top 
         if (reachedEnd)
         {
             SceneManager.LoadScene("End");

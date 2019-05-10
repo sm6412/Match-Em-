@@ -12,6 +12,7 @@ public class PlayerController : MonoBehaviour
     // ref to the progress controller 
     private ProgressController pc;
 
+    // display current animal being moused over 
     private DisplayCurrentAnimal currentAnimal;
 
     // player matrix x and y position
@@ -29,13 +30,17 @@ public class PlayerController : MonoBehaviour
     public GameObject yellowGlow;
     public GameObject greenGlow;
 
-
+    // bool for what progress particle
+    // effect is happening 
     bool isGreen = false;
     bool isYellow = false;
     bool isOrange = false;
     bool isRed = false;
+    
+    // current particles 
     GameObject currentParticles = null;
 
+    // sound
     public AudioClip moveSound;
     private AudioSource audioSource;
 
@@ -47,13 +52,11 @@ public class PlayerController : MonoBehaviour
     public GameObject orangeBorder;
     public GameObject hardBorder;
 
+    // player hat sprites 
     public Sprite redHat;
     public Sprite greenHat;
     public Sprite yellowHat;
     public Sprite orangeHat;
-
-
-
 
     // Start is called before the first frame update
     void Start()
@@ -71,9 +74,6 @@ public class PlayerController : MonoBehaviour
         matrixY = 2;
         gm.tiles[2, 2] = this.gameObject;
 
-        
-
-  
     }
 
     // Update is called once per frame
@@ -93,14 +93,13 @@ public class PlayerController : MonoBehaviour
         // use raycasting to see if the player clicks on a game object
         RaycastHit2D hit = Physics2D.Raycast(screenPos, Vector2.zero);
 
+        // make the game react when a tile is pressed 
         GameObject[] gms = GameObject.FindGameObjectsWithTag("border");
         if (hit && Input.GetMouseButtonDown(0))
         {
-            // if the user clicks on the start 
-            // button, start the gameplay scene
+            
             if ((matrixY-1>=0) && hit.collider.tag == "tile" && hit.collider.transform.position == gm.gridHolder[matrixX, matrixY - 1].transform.position)
             {
-                // make the tile look selected 
                 
                 if (gms.Length == 0)
                 {
@@ -258,6 +257,7 @@ public class PlayerController : MonoBehaviour
         }
         else
         {
+            // destroy thick border when not moused over 
             GameObject[] borderParticlesList = GameObject.FindGameObjectsWithTag("border");
             foreach (GameObject borderParticle in borderParticlesList)
             {
@@ -266,6 +266,7 @@ public class PlayerController : MonoBehaviour
         }
     }
 
+    // display hard game border 
     void isSelectedHard(int x, int y)
     {
         Vector2 pos = gm.gridHolder[x, y].transform.position;
@@ -281,6 +282,7 @@ public class PlayerController : MonoBehaviour
 
     }
 
+    // display easy and medium game border
     void isSelectedEasy(int x, int y)
     {
         Vector2 pos = gm.gridHolder[x, y].transform.position;
@@ -341,44 +343,6 @@ public class PlayerController : MonoBehaviour
 
     }
 
-
-    private float _currentScale = InitScale;
-    private const float TargetScale = 0.81f;
-    private const float InitScale = .70f;
-    private const int FramesCount = 100;
-    private const float AnimationTimeSeconds = 2;
-    private float _deltaTime = AnimationTimeSeconds / FramesCount;
-    private float _dx = (TargetScale - InitScale) / FramesCount;
-    private bool _upScale = true;
-    private IEnumerator Breath(GameObject Lungs)
-    {
-        while (true)
-        {
-            while (_upScale)
-            {
-                _currentScale += _dx;
-                if (_currentScale > TargetScale)
-                {
-                    _upScale = false;
-                    _currentScale = TargetScale;
-                }
-                Lungs.transform.localScale = Vector3.one * _currentScale;
-                yield return new WaitForSeconds(_deltaTime);
-            }
-
-            while (!_upScale)
-            {
-                _currentScale -= _dx;
-                if (_currentScale < InitScale)
-                {
-                    _upScale = true;
-                    _currentScale = InitScale;
-                }
-                Lungs.transform.localScale = Vector3.one * _currentScale;
-                yield return new WaitForSeconds(_deltaTime);
-            }
-        }
-    }
 
     // switch player with a tile underneath
     void switchDown()

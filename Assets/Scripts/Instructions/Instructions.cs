@@ -7,10 +7,12 @@ public class Instructions : MonoBehaviour
 {
 
     float originalScale;
+    
     // ref to audio source
     private AudioSource audioSource;
     bool overOption = false;
 
+    // instruction scenes 
     public bool instruc1;
     public bool instruc2;
     public bool instruc3;
@@ -42,11 +44,9 @@ public class Instructions : MonoBehaviour
 
         if (hit && Input.GetMouseButtonDown(0))
         {
-            // if the user clicks on the start 
-            // button, start the gameplay scene
+            // switch to next instruction scene when 'next' button pressed 
             if (hit.collider.tag == "next button")
             {
-                // switch scene to gameplay
                 if (instruc1 == true)
                 {
                     SceneManager.LoadScene("Instructions 2");
@@ -67,8 +67,6 @@ public class Instructions : MonoBehaviour
         }
         else if (hit)
         {
-            // if the mouse hovers over the button
-            // make it turn green
             if (hit.collider.tag == "next button")
             {
                 if (overOption == false)

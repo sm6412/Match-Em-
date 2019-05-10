@@ -56,8 +56,9 @@ public class End : MonoBehaviour
     // most matched species fun fact text
     public Text funfactText;
 
-
+    // original scale of button
     float originalScale;
+    
     // ref to audio source
     private AudioSource audioSource;
     bool overOption = false;
@@ -65,6 +66,7 @@ public class End : MonoBehaviour
     // sound effects for when the players makes a match
     public AudioClip mouseOver;
 
+    // replay button
     public GameObject replayButton;
 
     private void Start()
@@ -79,8 +81,6 @@ public class End : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-
-
         // get the mouse position
         Vector3 mousePos = Input.mousePosition;
         // set the z axis of the mouse
@@ -94,18 +94,15 @@ public class End : MonoBehaviour
 
         if (hit && Input.GetMouseButtonDown(0))
         {
-            // if the user clicks on the start 
-            // button, start the gameplay scene
+            // replay button hit
             if (hit.collider.tag == "replay button")
             {
-                // switch scene to gameplay
                 grabLevel();
             }
         }
         else if (hit)
         {
-            // if the mouse hovers over the button
-            // make it turn green
+            // replay button moused over 
             if (hit.collider.tag == "replay button")
             {
                 if (overOption == false)
@@ -130,6 +127,7 @@ public class End : MonoBehaviour
 
     }
 
+    // when player wants to replay, switch game back to difficulty selection 
     void grabLevel()
     {
         SceneManager.LoadScene("Difficulty Selection");
@@ -137,7 +135,7 @@ public class End : MonoBehaviour
     }
 
 
-    // display most matched species
+    // display most matched species and fun fact
     void DisplaySpecies(int type)
     {
         // AMPHIBIANS 

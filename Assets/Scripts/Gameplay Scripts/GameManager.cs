@@ -37,8 +37,6 @@ public class GameManager : MonoBehaviour
     // particle effects 
     public GameObject particles;
 
-
-
     // score information
     public int scoreNum = 0;
 
@@ -46,6 +44,7 @@ public class GameManager : MonoBehaviour
     bool recheckingGrid = false;
     bool foundMatches = false;
 
+    // see if learping 
     bool isLerping = false;
 
     // holds the number of each species in a match
@@ -67,13 +66,16 @@ public class GameManager : MonoBehaviour
     public bool medium;
     public bool hard;
 
+    // used to determine when hint detection starts
     bool canStartTimer = true;
     HintDetection hd;
 
     // back button variables 
     float originalScale;
+    
     // ref to audio source
     bool overOption = false;
+    
     // sound effects for when the players makes a match
     public AudioClip mouseOver;
     public GameObject backButton;
@@ -150,7 +152,7 @@ public class GameManager : MonoBehaviour
         recheckingGrid = false;
     }
 
-
+    // removes hint particles when the player moves 
     public void RemoveHintParticles()
     {
         GameObject[] hintParticlesList = GameObject.FindGameObjectsWithTag("hint");
@@ -160,9 +162,6 @@ public class GameManager : MonoBehaviour
         }
             
     }
-
-
-
 
     // returns a boolean based on whether the tile has matches
     bool checkTile(int x, int y)
@@ -345,7 +344,7 @@ public class GameManager : MonoBehaviour
     }
 
     
-
+    // repopulates grid 
     public void Repopulate(int x, int y)
     {
         
@@ -406,6 +405,8 @@ public class GameManager : MonoBehaviour
         }
     }
 
+    // tile effect for when the player switches positions
+    // with it
     [Header ("Tile Animation Variables")]
     public int FramesCount;
     public float AnimationTimeSeconds;
@@ -454,6 +455,7 @@ public class GameManager : MonoBehaviour
         
     }
 
+    // functions creates the reaction animation
     GameObject currentReaction = null;
     public float reactionTimer;
     public int reactionSpeed;
@@ -497,10 +499,6 @@ public class GameManager : MonoBehaviour
 
     }
 
-
-
-
-
     // this function is responsible for the lerping that occurs as the tiles fall down
     public IEnumerator lerp(Vector2 start, Vector2 end, GameObject g)
     {
@@ -537,18 +535,14 @@ public class GameManager : MonoBehaviour
         
         if (hit && Input.GetMouseButtonDown(0))
         {
-            // if the user clicks on the start 
-            // button, start the gameplay scene
             if (hit.collider.tag == "back button")
             {
-                // switch scene to gameplay
+                // switch scene to start
                 SceneManager.LoadScene("Start");
             }
         }
         else if (hit)
         {
-            // if the mouse hovers over the button
-            // make it turn green
             if (hit.collider.tag == "back button")
             {
                 if (overOption == false)
@@ -595,25 +589,17 @@ public class GameManager : MonoBehaviour
     public float waitTimeForHint;
     void CheckForHint()
     {
-
-        if ((Input.GetKeyDown(KeyCode.LeftArrow) || Input.GetKeyDown(KeyCode.A)) || (Input.GetKeyDown(KeyCode.RightArrow) || Input.GetKeyDown(KeyCode.D))
-            || (Input.GetKeyDown(KeyCode.UpArrow) || Input.GetKeyDown(KeyCode.W)) || (Input.GetKeyDown(KeyCode.DownArrow) || Input.GetKeyDown(KeyCode.S)))
+        // see whether its time for a hint 
+        if (seconds >= waitTimeForHint && easy==true)
         {
+            PlayerController player = GameObject.Find("Player(Clone)").GetComponent<PlayerController>();
+            // lets go to the hint detection script!
+            hd.IdleHint(player.matrixX, player.matrixY, 1);
             seconds = 0;
         }
         else
         {
-            if (seconds >= waitTimeForHint)
-            {
-                PlayerController player = GameObject.Find("Player(Clone)").GetComponent<PlayerController>();
-                // lets go to the hint detection script!
-                hd.IdleHint(player.matrixX,player.matrixY,1);
-                seconds = 0;
-            }
-            else
-            {
-                seconds += Time.deltaTime;
-            }
+            seconds += Time.deltaTime;
         }
 
     }

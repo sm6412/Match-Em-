@@ -5,6 +5,7 @@ using UnityEngine.UI;
 
 public class DisplayCurrentAnimal : MonoBehaviour
 {
+    // current animal sprite 
     public SpriteRenderer speciesSR;
 
     // most matched species name text
