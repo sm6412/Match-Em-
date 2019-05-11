@@ -20,6 +20,7 @@ TagManager:
   - back button
   - next button
   - instructions button
+  - cursor
   layers:
   - Default
   - TransparentFX
@@ -77,4 +78,7 @@ TagManager:
     locked: 0
   - name: text
     uniqueID: 3067727919
+    locked: 0
+  - name: cursor
+    uniqueID: 1404148577
     locked: 0
