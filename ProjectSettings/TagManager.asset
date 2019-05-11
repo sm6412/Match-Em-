@@ -21,6 +21,7 @@ TagManager:
   - next button
   - instructions button
   - cursor
+  - exit
   layers:
   - Default
   - TransparentFX
