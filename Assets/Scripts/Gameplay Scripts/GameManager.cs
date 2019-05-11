@@ -41,7 +41,7 @@ public class GameManager : MonoBehaviour
     public int scoreNum = 0;
 
     // grid recheck variables
-    bool recheckingGrid = false;
+    public bool recheckingGrid = false;
     bool foundMatches = false;
 
     // see if learping 
@@ -51,7 +51,7 @@ public class GameManager : MonoBehaviour
     int[] numOfEachSpecies;
 
     // ref to audio source
-    private AudioSource audioSource;
+    public AudioSource audioSource;
 
     // sound effects for when the players makes a match
     public AudioClip successSound;
@@ -305,10 +305,7 @@ public class GameManager : MonoBehaviour
 
         if (matchPosY.Count>=2 || matchPosX.Count>=2)
         {
-            if(recheckingGrid == false)
-            {
-                audioSource.PlayOneShot(successSound);
-            }
+
             
           // if the grid recheck is still occuring and a match
           // is found, change found matches to true
@@ -457,42 +454,40 @@ public class GameManager : MonoBehaviour
 
     // functions creates the reaction animation
     GameObject currentReaction = null;
+    [Header("Reaction Variables")]
     public float reactionTimer;
-    public int reactionSpeed;
+    public float reactionSpeed;
     private IEnumerator DisplayReaction(GameObject reaction)
     {
-        
         Destroy(currentReaction);
         currentReaction = Instantiate(reaction);
-        // move left
-        float rotationAmt = 0;
-        while (currentReaction.transform.rotation.z < .10)
+        // grow
+        while (currentReaction.transform.localScale.x < 1.3741)
         {
-            rotationAmt += Time.deltaTime*reactionSpeed;
-            currentReaction.transform.Rotate(0, 0, rotationAmt);
-            yield return null;
-            
-        }
-        // pause
-        float timer = reactionTimer;
-        while(timer > 0)
-        {
-            timer -= Time.deltaTime;
-        }
-        // move right
-        while (currentReaction.transform.rotation.z >= -.10)
-        {
-            rotationAmt -= Time.deltaTime*reactionSpeed;
-            currentReaction.transform.Rotate(0, 0, rotationAmt);
+            float scaleAmount = currentReaction.transform.localScale.x + (Time.deltaTime*reactionSpeed);
+            Vector3 scale = new Vector3(scaleAmount, scaleAmount, 1f);
+            currentReaction.transform.localScale = scale;
             yield return null;
 
         }
+        float temp = reactionTimer;
         // pause
-        timer = reactionTimer;
-        while (timer > 0)
+        while (temp > 0)
         {
-            timer -= Time.deltaTime;
+            temp -= Time.deltaTime;
+            yield return null;
+
         }
+        // shrink
+        while (currentReaction.transform.localScale.x > 0)
+        {
+            float scaleAmount = currentReaction.transform.localScale.x - (Time.deltaTime*reactionSpeed);
+            Vector3 scale = new Vector3(scaleAmount, scaleAmount, 1f);
+            currentReaction.transform.localScale = scale;
+            yield return null;
+
+        }
+
         // destroy
         Destroy(currentReaction);
         yield break;
@@ -586,6 +581,7 @@ public class GameManager : MonoBehaviour
     }
 
     float seconds = 0;
+    [Header("Hint Variables")]
     public float waitTimeForHint;
     void CheckForHint()
     {

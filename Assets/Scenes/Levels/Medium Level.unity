@@ -2371,6 +2371,8 @@ MonoBehaviour:
   particles: {fileID: 6033062650685479147, guid: d30d9b2087d3e044eac9bc7c7dd410a0,
     type: 3}
   scoreNum: 0
+  recheckingGrid: 0
+  audioSource: {fileID: 0}
   successSound: {fileID: 8300000, guid: 5b5cbe5723d6424439771fbe86a1067b, type: 3}
   awesome: {fileID: 4922823786408661907, guid: ff1911cb513321440823c06249c95a98, type: 3}
   bonus: {fileID: 272301678217723540, guid: 7417fabf40c721547921a38e263b55d8, type: 3}
@@ -2381,8 +2383,8 @@ MonoBehaviour:
   backButton: {fileID: 602908387}
   FramesCount: 250
   AnimationTimeSeconds: 25
-  reactionTimer: 1
-  reactionSpeed: 15
+  reactionTimer: 0.4
+  reactionSpeed: 4
   waitTimeForHint: 10
 --- !u!114 &1029641235
 MonoBehaviour:

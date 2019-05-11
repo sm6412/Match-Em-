@@ -12,17 +12,22 @@ public class ProgressController : MonoBehaviour
     
     // determines whether the end of the game is reached
     // when the leaf gets to the top of the progress tracker 
-    bool reachedEnd = false;
-
-    // moves leaf up 
     public IEnumerator AdjustProgress(int newScore)
     {
         int addAmt = newScore;
+        float currentY = this.transform.position.y;
+        float check = (addAmt * moveAmt) + currentY;
+        // only play a sound when the game will not end 
+        if (GameManager.Instance.recheckingGrid == false && check < 2.98)
+        {
+            GameManager.Instance.audioSource.PlayOneShot(GameManager.Instance.successSound);
+        }
+        
         while(addAmt > 0)
         {
-            if ((this.transform.position.y + moveAmt) >= 3.04)
+            if ((this.transform.position.y + moveAmt) >= 2.98)
             {
-                reachedEnd = true;
+                SceneManager.LoadScene("End");
                 yield break;
             }
             this.transform.position += new Vector3(0, moveAmt, 0);
@@ -34,16 +39,7 @@ public class ProgressController : MonoBehaviour
     }
 
 
-    private void Update()
-    {
-        // switches to end scene when the progress 
-        // leaf reached the top 
-        if (reachedEnd)
-        {
-            SceneManager.LoadScene("End");
 
-        }
-    }
 
 
 }

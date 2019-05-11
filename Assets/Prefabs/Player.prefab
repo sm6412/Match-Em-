@@ -104,6 +104,7 @@ MonoBehaviour:
   greenGlow: {fileID: 7839467053582479336, guid: a13acdd85c3431048a48d3de517cd9ce,
     type: 3}
   moveSound: {fileID: 8300000, guid: 7935551f773ec5042b38204dc16c6194, type: 3}
+  mouseOver: {fileID: 8300000, guid: 4b77c72077aab1c4aade1f17544b45aa, type: 3}
   greenBorder: {fileID: 6678514502324512855, guid: 8f243061de6407f47b83493ebb28e117,
     type: 3}
   pinkBorder: {fileID: 410802148201052884, guid: b29ab09f7d3ff2a45825876b99a84024,

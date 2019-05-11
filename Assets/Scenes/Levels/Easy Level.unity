@@ -2371,6 +2371,8 @@ MonoBehaviour:
   particles: {fileID: 6033062650685479147, guid: d30d9b2087d3e044eac9bc7c7dd410a0,
     type: 3}
   scoreNum: 0
+  recheckingGrid: 0
+  audioSource: {fileID: 1029641232}
   successSound: {fileID: 8300000, guid: 5b5cbe5723d6424439771fbe86a1067b, type: 3}
   awesome: {fileID: 4922823786408661907, guid: ff1911cb513321440823c06249c95a98, type: 3}
   bonus: {fileID: 272301678217723540, guid: 7417fabf40c721547921a38e263b55d8, type: 3}
@@ -2381,8 +2383,8 @@ MonoBehaviour:
   backButton: {fileID: 602908387}
   FramesCount: 250
   AnimationTimeSeconds: 25
-  reactionTimer: 1
-  reactionSpeed: 15
+  reactionTimer: 0.4
+  reactionSpeed: 4
   waitTimeForHint: 10
 --- !u!114 &1029641235
 MonoBehaviour:
@@ -2655,7 +2657,6 @@ Transform:
   m_LocalScale: {x: 45, y: 45, z: 45}
   m_Children:
   - {fileID: 276675022}
-  - {fileID: 2013217686}
   m_Father: {fileID: 1632054871}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -3788,11 +3789,11 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2013217683}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 1.0701504, y: -2.2686362, z: 0.093131505}
-  m_LocalScale: {x: 0.7595434, y: 0.7636328, z: 0.7636328}
+  m_LocalPosition: {x: -5.798262, y: -2.2693195, z: 0.0660553}
+  m_LocalScale: {x: 0.7597722, y: 0.7638628, z: 0.7638628}
   m_Children: []
-  m_Father: {fileID: 1124528650}
-  m_RootOrder: 1
+  m_Father: {fileID: 0}
+  m_RootOrder: 6
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &2095044480
 GameObject:
