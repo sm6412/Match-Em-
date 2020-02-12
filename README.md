@@ -1,0 +1,2 @@
+# Match-Em-
+Match Em’ is a strategic puzzle game created by me for children to learn about the different animal groups. Players win by matching three or more animals from the same animal group. It features three levels of difficulty: easy, medium, and hard. In the easy level I designed a hint algorithm that utilized particle effects to demonstrate when nearby tiles could be used to create a match. At the conclusion of a game, the most matched animal appears along with a fun fact about them. 
